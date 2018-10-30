@@ -34,8 +34,26 @@ class Welcome extends My_Controller {
   //       $result = $this->cache->redis->get('foo');
 		// var_dump($result);
 
+
 		$this->_head();
+
+
+        $this->session->set_userdata(array('logged_in'=> true, 'name' => 'admin'));
+        var_dump($this->session->all_userdata());
+
+
+
+        if ( ! $foo = $this->cache->get('foo'))
+        {
+            echo 'Saving to the cache!<br />';
+            $foo = array('a' => 'foobarbaz!', 'b' => 'fffff');
+
+            // Save into the cache for 5 minutes
+            $this->cache->save('foo', $foo, 300);
+        }
+
 		$this->load->view('main', $this->view);
+
 		$this->_footer();
 	}
 }
