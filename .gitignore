@@ -37,3 +37,4 @@ web.config
 application/config/production/*
 !application/config/production/index.html
 application/config/database.php
+application/sessions/*

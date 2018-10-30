@@ -30,8 +30,8 @@ class Welcome extends My_Controller {
 		$this->view['sidebar'] = array_merge($this->view['sidebar'], $sidebar);
 
         // $data = $this->customer_m->custlist_all();
-        // $this->cache->redis->save('foo', array('a'=>'aa'));
-        // $result = $this->cache->redis->get_metadata('foo');
+  //       $this->cache->redis->save('foo', array('a'=>'aa'));
+  //       $result = $this->cache->redis->get('foo');
 		// var_dump($result);
 
 		$this->_head();
