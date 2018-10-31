@@ -17,15 +17,8 @@ class My_Controller extends CI_Controller {
         $this->view = (object) [
             'sidebar' => [],
             'gnb' => [],
-            'content' => []
+            'content' => (object) []
         ];
-
-        // $this->view = { a = 'gg' };
-        // $this->view->sidebar = array();
-        // $this->view->gnb = array();
-        // $this->view->flash_msg = array();
-        // $this->view->content = array();
-
     }
 
     function _load_view($page)
@@ -35,6 +28,11 @@ class My_Controller extends CI_Controller {
         $this->load->view('gnb', $this->view);
         $this->load->view($page, $this->view);
         $this->load->view('footer', $this->view);
+    }
+
+    function _set_flash_message($message, $class = 'info', $popup = false)
+    {
+        $this->session->set_flashdata('message', ['class' => $class, 'message' => $message, 'popup' => $popup]);
     }
 }
 ?>
