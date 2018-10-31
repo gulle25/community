@@ -15,3 +15,4 @@ class Main extends My_Controller {
 		$this->_footer();
 	}
 }
+?>

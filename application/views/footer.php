@@ -4,7 +4,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </div>
       </div>
     </div>
-    <!-- <script src="/application/libraries/bootstrap/js/bootstrap.min.js"></script> -->
   </body>
 
   <script type="text/javascript">

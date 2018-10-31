@@ -11,27 +11,30 @@ class My_Controller extends CI_Controller {
 
         $this->load->config('environment');
         $this->load->config('community');
-        $this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
+        $this->load->driver('cache', ['adapter' => 'apc', 'backup' => 'file']);
+        $this->lang->load('main','korean');
 
-        $this->view = array(
-            'gnb' => array(),
-            'sidebar' => array(),
-            'content' => array()
-        );
+        $this->view = (object) [
+            'sidebar' => [],
+            'gnb' => [],
+            'content' => []
+        ];
 
-        $this->user = array(
-            'session' => $this->session->all_userdata()
-        );
+        // $this->view = { a = 'gg' };
+        // $this->view->sidebar = array();
+        // $this->view->gnb = array();
+        // $this->view->flash_msg = array();
+        // $this->view->content = array();
+
     }
 
-    function _head()
+    function _load_view($page)
     {
-		$this->load->view('head', $this->view);
+        $this->load->view('head', $this->view);
+        $this->load->view('sidebar', $this->view);
+        $this->load->view('gnb', $this->view);
+        $this->load->view($page, $this->view);
+        $this->load->view('footer', $this->view);
     }
-
-    function _footer()
-    {
-		$this->load->view('footer', $this->view);
-    }
-
 }
+?>

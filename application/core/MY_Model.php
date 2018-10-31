@@ -7,3 +7,4 @@ class My_Model extends CI_Model {
         parent::__construct();
     }
 }
+?>
