@@ -1,19 +1,22 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+
+echo validation_errors();
+echo form_open('http://' . $_SERVER['HTTP_HOST'] . '/index.php/auth/authenticate');
 ?>
 
-<form action="/index.php/">
+<!-- <form action="/index.php/auth/authenticate"> -->
   <div class="form-group">
-    <label for="email"><?=lang('main_email_addr')?></label>
-    <input type="email" class="form-control" id="email" placeholder="<?=lang('main_input_email')?>">
+    <label for="email"><?=lang('email')?></label>
+    <input type="email" class="form-control" id="email" name="email" placeholder="<?=lang('input_email')?>" value="<?=isset($_REQUEST['email']) ? $_REQUEST['email'] : ''?>">
   </div>
   <div class="form-group">
-    <label for="password"><?=lang('main_password')?></label>
-    <input type="password" class="form-control" id="password" placeholder="<?=lang('main_input_password')?>">
+    <label for="password"><?=lang('password')?></label>
+    <input type="password" class="form-control" id="password" name="password" placeholder="<?=lang('input_password')?>">
   </div>
   <div class="form-group">
-    <input type="checkbox" id="save_pwd"><?=lang('main_save_pwd')?>
+    <input type="checkbox" id="save_pwd" name="save_pwd"><?=lang('save_pwd')?>
   </div>
-  <button type="submit" class="btn btn-default"><?=lang('main_login')?></button>
-  <button type="submit" class="btn"><?=lang('main_sign_up')?></button>
+  <button type="submit" class="btn btn-default"><?=lang('login')?></button>
+  <button type="submit" class="btn"><?=lang('sign_up')?></button>
 </form>

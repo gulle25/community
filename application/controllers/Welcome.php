@@ -24,71 +24,13 @@ class Welcome extends My_Controller {
     if ($this->session->is_logged_in)
     {
       // 로그인 되어진 메인 페이지
+      $this->_set_gnb_home();
+      $this->_set_sidebar_home();
       $this->_load_view('main');
     }
     else
     {
-      // 로그인 하지 않은 상태
-      $gnb = [
-        (object) ['type' => 'menubar', 'value' => 'menu', 'class' => 'item']
-      ];
-      $this->view->gnb = array_merge($this->view->gnb, $gnb);
-
-      $sidebar = [
-        (object) ['type' => 'text_link', 'value' => lang('main_board'), 'class' => 'item'],
-        (object) ['type' => 'text_link', 'value' => 'board2', 'class' => 'item'],
-        (object) ['type' => 'text', 'value' => 'text', 'class' => 'item'],
-        (object) ['type' => 'text_link', 'value' => 'board3', 'class' => 'item']
-      ];
-      $this->view->sidebar = array_merge($this->view->sidebar, $sidebar);
-
-      $this->_load_view('login');
-    }
-  }
-
-  public function login()
-  {
-    if ($this->session->is_logged_in)
-    {
-      // 로그인 되어진 메인 페이지
-      $this->_load_view('main');
-    }
-    else
-    {
-      // 로그인 하지 않은 상태
-      $gnb = [
-        (object) ['type' => 'menubar', 'value' => 'menu', 'class' => 'item']
-      ];
-      $this->view->gnb = array_merge($this->view->gnb, $gnb);
-
-      $sidebar = [
-        (object) ['type' => 'text_link', 'value' => lang('main_board'), 'class' => 'item'],
-        (object) ['type' => 'text_link', 'value' => 'board2', 'class' => 'item'],
-        (object) ['type' => 'text', 'value' => 'text', 'class' => 'item'],
-        (object) ['type' => 'text_link', 'value' => 'board3', 'class' => 'item']
-      ];
-      $this->view->sidebar = array_merge($this->view->sidebar, $sidebar);
-
-      $this->load->library('form_validation');
-
-      $this->form_validation->set_rules('email', '이메일 주소', 'required|valid_email|is_unique[user.email]');
-      $this->form_validation->set_rules('password', '비밀번호', 'required|min_length[4]|max_length[30]');
-
-      if ($this->form_validation->run() === false)
-      {
-          $this->_load_view('login');
-      }
-      else
-      {
-        // form validatoin 완료
-        if (!function_exists('password_hash'))
-        {
-          $this->load->helper('password');
-        }
-        $hash = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
-
-        redirect('/');
-      }
+      $this->_redirect('/auth/login?returnURL=' . rawurlencode(site_url($this->input->get('returnURL'))));
     }
   }
 }
