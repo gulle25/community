@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-$config['cache_ver_user_info'] = 'v1';
+// Cache version
+define('CACHE_KEY_USER', 'user_v1_');
+
+$config['dummy'] = 'dummy';
 
 ?>

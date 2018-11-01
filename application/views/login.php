@@ -17,6 +17,9 @@ echo form_open('http://' . $_SERVER['HTTP_HOST'] . '/index.php/auth/authenticate
   <div class="form-group">
     <input type="checkbox" id="save_pwd" name="save_pwd"><?=lang('save_pwd')?>
   </div>
+  <div class="form-group">
+    <input type="hidden" id="cafe_type" name="cafe_type" value="apart">
+  </div>
   <button type="submit" class="btn btn-default"><?=lang('login')?></button>
   <button type="submit" class="btn"><?=lang('sign_up')?></button>
 </form>
