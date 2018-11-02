@@ -12,20 +12,10 @@ class Auth extends My_Controller {
 
   public function login()
   {
-    // if ($this->maintaining) return;
-
     if ($this->_is_logged_in()) {
       $this->_redirect('/');
-      // $this->_try_login();
       return;
     }
-
-    // if ($this->session->is_logged_in)
-    // {
-    //   // 로그인 되어진 메인 페이지
-    //   $this->_redirect('/');
-    //   return;
-    // }
 
     // 로그인 폼 출력
     $this->load->library('form_validation');
@@ -37,11 +27,8 @@ class Auth extends My_Controller {
 
   public function authenticate()
   {
-    // if ($this->maintaining) return;
-
     if ($this->session->is_logged_in)
     {
-      // 로그인 되어진 메인 페이지
       $this->_redirect('/');
       return;
     }
@@ -111,12 +98,36 @@ class Auth extends My_Controller {
 
     // 인증 성공, 세션에 저장
     $this->_set_flash_message(lang('login_success'));
-    // echo site_url($this->input->get('returnURL'));
     $this->session->set_userdata('is_logged_in', true);
     $this->session->set_userdata('email', $email);
     $this->session->set_userdata('cafe_type', 'apart');
+    $this->session->set_userdata('user_grade', $cache->grade);
 
-    redirect(site_url($this->input->get('returnURL')));
+    redirect('http://' . site_url($this->input->get('returnURL')));
   }
+
+  function logout()
+  {
+    $this->session->unset_userdata('is_logged_in');
+    $this->_redirect('/');
+  }
+
+  function signup()
+  {
+    if ($this->_is_logged_in()) {
+      $this->_redirect('/');
+      return;
+    }
+
+    $mode = $this->input->get('mode');
+
+    // 회원 가입 폼 출력
+    $this->load->library('form_validation');
+
+    $this->_set_gnb_unsigned();
+    $this->_set_sidebar_unsigned();
+    $this->_load_view('signup');
+  }
+
 }
 ?>

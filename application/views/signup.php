@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 echo validation_errors();
-echo form_open('http://' . $_SERVER['HTTP_HOST'] . '/index.php/auth/authenticate');
+echo form_open('http://' . $_SERVER['HTTP_HOST'] . '/index.php/auth/apply');
 ?>
 
   <div class="form-group">
@@ -20,5 +20,4 @@ echo form_open('http://' . $_SERVER['HTTP_HOST'] . '/index.php/auth/authenticate
     <input type="hidden" id="cafe_type" name="cafe_type" value="apart">
   </div>
   <button type="submit" class="btn btn-default"><?=lang('login')?></button>
-  <a href="/index.php/auth/signup?mode=agree"><label class="btn"><?=lang('sign_up')?></label></a>
 </form>

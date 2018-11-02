@@ -2,7 +2,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class My_Controller extends CI_Controller {
-    protected $is_logged_in = false;
     protected $maintaining = false;
     protected $administrator = false;
     protected $now;
@@ -30,7 +29,7 @@ class My_Controller extends CI_Controller {
         if ($this->session->user_grade && ($this->session->user_grade == 'admin' || $this->session->user_grade == 'operator'))
         {
             // 서비스 관리자
-            $administrator = true;
+            $this->administrator = true;
         }
 
         $now = date('Y.m.d H:i:s');
@@ -87,6 +86,28 @@ class My_Controller extends CI_Controller {
         return true;
     }
 
+    function _exec_available()
+    {
+        if (!$this->_is_logged_in())
+        {
+            $this->_try_login();
+            return false;
+        }
+
+        if ($this->maintaining)
+        {
+            $this->_set_flash_message(lang('maintenance'));
+            if  (!$this->administrator)
+            {
+                $this->session->unset_userdata('is_logged_in');
+                $this->_redirect('/');
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     function _load_view($page)
     {
         $this->load->view('head', $this->view);
@@ -113,10 +134,6 @@ class My_Controller extends CI_Controller {
 
     function _set_gnb_unsigned()
     {
-        // $gnb = [
-        //   (object) ['type' => 'menubar', 'value' => 'menu', 'class' => 'item']
-        // ];
-        // $this->view->gnb = array_merge($this->view->gnb, $gnb);
     }
 
     function _set_gnb_home()

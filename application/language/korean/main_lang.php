@@ -9,9 +9,9 @@ $lang['input_password'] = '비밀번호를 입력하세요';
 $lang['login'] = '로그인';
 $lang['sign_up'] = '회원 가입';
 $lang['save_pwd'] = '비밀번호 저장';
-$lang['maintenance'] = '서비스 점검중 입니다';
 
 // message
+$lang['maintenance'] = '서비스 점검중 입니다';
 $lang['login_success'] = '로그인 되었습니다';
 
 // error message

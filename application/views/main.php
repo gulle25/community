@@ -1,7 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
-echo "Main Test";
-
-// var_dump($sidebar);
 ?>
+
+    <a href="/index.php/auth/logout"><button id="logout" class="ui button">Logout</button></a>
