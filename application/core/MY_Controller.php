@@ -2,15 +2,20 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class My_Controller extends CI_Controller {
+    protected $is_logged_in = false;
+    protected $maintaining = false;
+    protected $administrator = false;
+    protected $now;
     protected $view;
-    protected $user;
+    protected $user_cache;  // 사용자 캐시 정보
+    protected $cafe_type;   // 카페 종류
 
     function __construct()
     {
         parent::__construct();
 
         $this->load->config('environment');
-        $this->load->config('community');
+        // $this->load->config('community');
         $this->load->driver('cache', ['adapter' => 'apc', 'backup' => 'file']);
         $this->load->library('session');
 
@@ -21,6 +26,65 @@ class My_Controller extends CI_Controller {
             'gnb' => [],
             'content' => (object) []
         ];
+
+        if ($this->session->user_grade && ($this->session->user_grade == 'admin' || $this->session->user_grade == 'operator'))
+        {
+            // 서비스 관리자
+            $administrator = true;
+        }
+
+        $now = date('Y.m.d H:i:s');
+        if ($this->config->item('maintenance')->enable)
+        {
+            if ($now >= $this->config->item('maintenance')->begin && $now < $this->config->item('maintenance')->end)
+            {
+                // 서비스 점검 중
+                $this->maintaining = true;
+                $this->_set_flash_message(lang('maintenance'));
+            }
+        }
+    }
+
+    function _is_logged_in()
+    {
+        // 사용자 세션 확인
+        if (!$this->session->is_logged_in || !$this->session->email)
+        {
+            return false;
+        }
+
+        // 사용자 캐시 확인
+        $cache_key = CACHE_KEY_USER . md5($this->session->email);
+        $this->user_cache = $this->cache->get($cache_key);
+        $this->cafe_type = $this->session->cafe_type;
+        if (!$this->user_cache)
+        {
+          // 사용자 캐시가 존재 하지 않으면 DB 에서 정보를 읽는다
+          $this->load->database();
+          $this->load->model('user_model');
+          $result = $this->user_model->get('email', $this->session->email, $this->cafe_type);
+          if (!$result)
+          {
+            // DB 읽기 실패, 세션 로그인 해제
+            $this->_set_flash_message(lang('query_fail'));
+            $this->session->unset_userdata('is_logged_in');
+            return false;
+          }
+
+          if ($result[0]->errno != 0)
+          {
+            // 메일 주소가 가입 되어 있지 않음, 세션 로그인 해제
+            $this->_set_flash_message(lang('unknown_user'));
+            $this->session->unset_userdata('is_logged_in');
+            return false;
+          }
+
+          // 캐시에 저장
+          $this->user_cache = $result[0];
+          $this->cache->save($cache_key, $this->user_cache, $this->config->item('cache_exp_user'));
+        }
+
+        return true;
     }
 
     function _load_view($page)
@@ -35,6 +99,11 @@ class My_Controller extends CI_Controller {
     function _set_flash_message($message, $class = 'info', $popup = false)
     {
         $this->session->set_flashdata('message', ['class' => $class, 'message' => $message, 'popup' => $popup]);
+    }
+
+    function _try_login()
+    {
+        $this->_redirect('/auth/login?returnURL=' . rawurlencode(site_url($this->input->get('returnURL'))));
     }
 
     function _redirect($url)

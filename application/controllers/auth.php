@@ -5,17 +5,27 @@ class Auth extends My_Controller {
 
   public function index()
   {
+    if ($this->maintaining) return;
+
     $this->_redirect('/auth/login?returnURL=' . rawurlencode(site_url($this->input->get('returnURL'))));
   }
 
   public function login()
   {
-    if ($this->session->is_logged_in)
-    {
-      // 로그인 되어진 메인 페이지
+    // if ($this->maintaining) return;
+
+    if ($this->_is_logged_in()) {
       $this->_redirect('/');
+      // $this->_try_login();
       return;
     }
+
+    // if ($this->session->is_logged_in)
+    // {
+    //   // 로그인 되어진 메인 페이지
+    //   $this->_redirect('/');
+    //   return;
+    // }
 
     // 로그인 폼 출력
     $this->load->library('form_validation');
@@ -27,6 +37,8 @@ class Auth extends My_Controller {
 
   public function authenticate()
   {
+    // if ($this->maintaining) return;
+
     if ($this->session->is_logged_in)
     {
       // 로그인 되어진 메인 페이지
@@ -101,6 +113,9 @@ class Auth extends My_Controller {
     $this->_set_flash_message(lang('login_success'));
     // echo site_url($this->input->get('returnURL'));
     $this->session->set_userdata('is_logged_in', true);
+    $this->session->set_userdata('email', $email);
+    $this->session->set_userdata('cafe_type', 'apart');
+
     redirect(site_url($this->input->get('returnURL')));
   }
 }

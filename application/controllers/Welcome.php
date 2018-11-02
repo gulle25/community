@@ -21,16 +21,22 @@ class Welcome extends My_Controller {
 
   public function index()
   {
+    // if ($this->maintaining) return;
+    if (!$this->_is_logged_in()) {
+      $this->_try_login();
+      return;
+    }
+
     if ($this->session->is_logged_in)
     {
       // 로그인 되어진 메인 페이지
       $this->_set_gnb_home();
       $this->_set_sidebar_home();
-      $this->_load_view('main');
+      // $this->_load_view('main');
     }
     else
     {
-      $this->_redirect('/auth/login?returnURL=' . rawurlencode(site_url($this->input->get('returnURL'))));
+      // $this->_redirect('/auth/login?returnURL=' . rawurlencode(site_url($this->input->get('returnURL'))));
     }
   }
 }
