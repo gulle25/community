@@ -5,6 +5,7 @@ echo validation_errors();
 echo form_open('http://' . $_SERVER['HTTP_HOST'] . '/index.php/auth/authenticate');
 ?>
 
+  <input type="hidden" id="cafe_type" name="cafe_type" value="apart">
   <div class="form-group">
     <label for="email"><?=lang('email')?></label>
     <input type="email" class="form-control" id="email" name="email" placeholder="<?=lang('input_email')?>" value="<?=isset($_REQUEST['email']) ? $_REQUEST['email'] : ''?>">
@@ -17,8 +18,7 @@ echo form_open('http://' . $_SERVER['HTTP_HOST'] . '/index.php/auth/authenticate
     <input type="checkbox" id="save_pwd" name="save_pwd"><?=lang('save_pwd')?>
   </div>
   <div class="form-group">
-    <input type="hidden" id="cafe_type" name="cafe_type" value="apart">
   </div>
   <button type="submit" class="btn btn-default"><?=lang('login')?></button>
-  <a href="/index.php/auth/signup?mode=agree"><label class="btn"><?=lang('sign_up')?></label></a>
+  <a href="/index.php/auth/signup?mode=begin"><label class="btn"><?=lang('sign_up')?></label></a>
 </form>

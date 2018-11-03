@@ -14,7 +14,6 @@ class My_Controller extends CI_Controller {
         parent::__construct();
 
         $this->load->config('environment');
-        // $this->load->config('community');
         $this->load->driver('cache', ['adapter' => 'apc', 'backup' => 'file']);
         $this->load->library('session');
 

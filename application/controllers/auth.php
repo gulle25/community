@@ -119,14 +119,132 @@ class Auth extends My_Controller {
       return;
     }
 
-    $mode = $this->input->get('mode');
+    $this->_set_gnb_unsigned();
+    $this->_set_sidebar_unsigned();
 
     // 회원 가입 폼 출력
     $this->load->library('form_validation');
 
-    $this->_set_gnb_unsigned();
-    $this->_set_sidebar_unsigned();
-    $this->_load_view('signup');
+    $content = $this->view->content;
+    $content->signup = (object) [];
+    $sess_signup = $this->session->userdata('signup');
+
+    $mode = $this->input->get('mode');
+    if (!$mode) $mode = $this->input->post('mode');
+    switch ($mode)
+    {
+      case 'begin':   // 회원 가입 절차 시작
+        $this->session->set_userdata('signup', (object) ['mode' => $mode]);
+        $this->_load_view('signup_agree');    // 약관 동의
+        return;
+
+      case 'agree':   // 약관 동의
+        if ($sess_signup->mode != 'begin')
+        {
+          $this->_redirect('/');
+          return;
+        }
+
+        $this->form_validation->set_rules('agree_service', lang('agree_service'), 'required');
+        $this->form_validation->set_rules('agree_user_info', lang('agree_user_info'), 'required');
+        $this->form_validation->set_rules('agree_location_info', lang('agree_location_info'), 'required');
+
+        if ($this->form_validation->run() === false)
+        {
+          $this->_load_view('signup_agree');
+          return;
+        }
+
+        $sess_signup->mode = $mode;
+        $sess_signup->agreement = (object) ['service' => $this->input->post('agree_service'),
+          'agree_user_info' => $this->input->post('agree_user_info'),
+          'location_info' => $this->input->post('agree_location_info'),
+          'event' => $this->input->post('agree_event') ? $this->input->post('agree_event') : 'off'];
+        $this->session->set_userdata('signup', $sess_signup);
+        $this->_load_view('signup');    // 회원 가입
+        return;
+
+      case 'apply':   // 회원 인증 및 가입
+        if ($sess_signup->mode != 'agree' && $sess_signup->mode != 'apply')
+        {
+          $this->_redirect('/');
+          return;
+        }
+
+        // var_dump($this->session);
+        if (!isset($sess_signup->name_proved))
+        {
+          $this->form_validation->set_rules('name', lang('name'), 'required|max_length[10]');
+          $this->form_validation->set_rules('reg_num1', lang('reg_num1'), 'required|numeric|exact_length[6]');
+          $this->form_validation->set_rules('reg_num2', lang('reg_num2'), 'required|numeric|exact_length[7]');
+
+          if ($this->form_validation->run() === false)
+          {
+            $this->_load_view('signup');
+            return;
+          }
+
+          // [TODO] 실명 인증 후 처리
+          $sess_signup->name = $this->input->post('name');
+          $sess_signup->regidence_hash = md5($this->input->post('reg_num1').$this->input->post('reg_num2'));
+          $sess_signup->name_proved = true;
+        }
+
+        if (!isset($sess_signup->email_proved))
+        {
+          $this->form_validation->set_rules('email', lang('email'), 'required|valid_email|max_length[120]');
+          $this->form_validation->set_rules('prove_email', lang('prove_email'), 'required|numeric|exact_length[6]');
+
+          if ($this->form_validation->run() === false)
+          {
+            $this->_load_view('signup');
+            return;
+          }
+
+          // [TODO] 이메일 인증 후 처리
+          $sess_signup->email = $this->input->post('email');
+          $sess_signup->email_proved = true;
+        }
+
+        if (!isset($sess_signup->phone_proved))
+        {
+          $this->form_validation->set_rules('phone', lang('phone'), 'required|numeric|min_length[10]|max_length[11]');
+          $this->form_validation->set_rules('prove_phone', lang('prove_phone'), 'required|numeric|exact_length[6]');
+
+          if ($this->form_validation->run() === false)
+          {
+            $this->_load_view('signup');
+            return;
+          }
+
+          // [TODO] 휴대폰 번호 인증 후 처리
+          $sess_signup->phone = $this->input->post('phone');
+          $sess_signup->phone_proved = true;
+        }
+
+        if (!isset($sess_signup->password_proved))
+        {
+          $this->form_validation->set_rules('password', lang('password'), 'required|min_length[4]|max_length[32]');
+          $this->form_validation->set_rules('re_password', lang('re_password'), 'required|matches[password]');
+
+          if ($this->form_validation->run() === false)
+          {
+            $this->_load_view('signup');
+            return;
+          }
+
+          // [TODO] 비밀번호 인증 후 처리
+          $sess_signup->pwd_hash = md5($this->input->post('password'));
+          $sess_signup->password_proved = true;
+        }
+
+        $sess_signup->mode = $mode;
+        $this->session->set_userdata('signup', $sess_signup);
+        $this->_load_view('signup');    // 회원 가입
+        return;
+    }
+    echo "wrong mode:" . $mode;
+    // $this->_load_view('/');
   }
 
 }

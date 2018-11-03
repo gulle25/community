@@ -10,10 +10,9 @@ class Main extends My_Controller {
 	public function index()
 	{
 
-		// $this->_head();
-		// $this->load->view('main', $this->view);
-		// $this->_footer();
-    echo "Main Page";
+		$this->_head();
+		$this->load->view('main', $this->view);
+		$this->_footer();
 	}
 }
 ?>
