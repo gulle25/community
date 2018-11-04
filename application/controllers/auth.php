@@ -49,43 +49,20 @@ class Auth extends My_Controller {
     }
 
     // form validatoin 완료
-    $pwd_hash = md5($this->input->post('password'));
-
-    // 사용자 정보 캐시 확인
-    $email = $this->input->post('email');
-    $cafe_type = $this->input->post('cafe_type');
-    $cache_key = CACHE_KEY_USER . md5($email);
-    $cache = $this->cache->get($cache_key);
-    if (!$cache)
+    $this->cafe_type = $this->input->post('cafe_type');
+    $this->load->database();
+    $this->load->model('user_model');
+    $cache = $this->user_model->login($this->input->post('email'));
+    if ($cache->errno != 0)
     {
-      // 사용자 캐시가 존재 하지 않으면 DB 에서 정보 읽는다
-      $this->load->database();
-      $this->load->model('user_model');
-      $result = $this->user_model->get('email', $email, $cafe_type);
-      if (!$result)
-      {
-        // DB 읽기 실패
-        $this->_set_flash_message(lang('query_fail'));
-        $this->_set_gnb_unsigned();
-        $this->_set_sidebar_unsigned();
-        $this->_load_view('login');
-        return;
-      }
-      if ($result[0]->errno != 0)
-      {
-        // 메일 주소가 가입 되지 않음
-        $this->_set_flash_message(lang('email_not_found'));
-        $this->_set_gnb_unsigned();
-        $this->_set_sidebar_unsigned();
-        $this->_load_view('login');
-        return;
-      }
-
-      // 캐시에 저장
-      $cache = $result[0];
-      $this->cache->save($cache_key, $cache, $this->config->item('cache_exp_user'));
+      $this->_set_flash_message(lang($cache->errno == My_Model::DB_QUERY_FAIL ? 'query_fail' : 'email_not_found'));
+      $this->_set_gnb_unsigned();
+      $this->_set_sidebar_unsigned();
+      $this->_load_view('login');
+      return;
     }
 
+    $pwd_hash = md5($this->input->post('password'));
     if ($cache->pwd_hash != $pwd_hash)
     {
       // 비밀번호 틀림
@@ -99,9 +76,7 @@ class Auth extends My_Controller {
     // 인증 성공, 세션에 저장
     $this->_set_flash_message(lang('login_success'));
     $this->session->set_userdata('is_logged_in', true);
-    $this->session->set_userdata('email', $email);
-    $this->session->set_userdata('cafe_type', 'apart');
-    $this->session->set_userdata('user_grade', $cache->grade);
+    $this->session->set_userdata('email', $this->input->post('email'));
 
     redirect('http://' . site_url($this->input->get('returnURL')));
   }
@@ -171,6 +146,9 @@ class Auth extends My_Controller {
           return;
         }
 
+        $this->load->database();
+        $this->load->model('user_model');
+
         // var_dump($this->session);
         if (!isset($sess_signup->name_proved))
         {
@@ -180,6 +158,18 @@ class Auth extends My_Controller {
 
           if ($this->form_validation->run() === false)
           {
+            $this->_load_view('signup');
+            return;
+          }
+
+          // 주민번호로 중복 가입 검사
+          $residence_hash = md5($this->input->post('reg_num1') . $this->input->post('reg_num2'));
+          $user = $this->user_model->get('residence', $residence_hash);
+          if ($user->errno == 0)
+          {
+            $this->_set_flash_message(lang('user_already_exist'));
+            $this->_set_gnb_unsigned();
+            $this->_set_sidebar_unsigned();
             $this->_load_view('signup');
             return;
           }
@@ -201,6 +191,17 @@ class Auth extends My_Controller {
             return;
           }
 
+          // 이메일 주소 중복 가입 검사
+          $user = $this->user_model->get('email', $this->input->post('email'));
+          if ($user->errno == 0)
+          {
+            $this->_set_flash_message(lang('email_already_exist'));
+            $this->_set_gnb_unsigned();
+            $this->_set_sidebar_unsigned();
+            $this->_load_view('signup');
+            return;
+          }
+
           // [TODO] 이메일 인증 후 처리
           $sess_signup->email = $this->input->post('email');
           $sess_signup->email_proved = true;
@@ -213,6 +214,17 @@ class Auth extends My_Controller {
 
           if ($this->form_validation->run() === false)
           {
+            $this->_load_view('signup');
+            return;
+          }
+
+          // 휴대폰 번호 주소 중복 가입 검사
+          $user = $this->user_model->get('phone', $this->input->post('phone'));
+          if ($user->errno == 0)
+          {
+            $this->_set_flash_message(lang('phone_already_exist'));
+            $this->_set_gnb_unsigned();
+            $this->_set_sidebar_unsigned();
             $this->_load_view('signup');
             return;
           }
@@ -238,9 +250,12 @@ class Auth extends My_Controller {
           $sess_signup->password_proved = true;
         }
 
-        $sess_signup->mode = $mode;
-        $this->session->set_userdata('signup', $sess_signup);
-        $this->_load_view('signup');    // 회원 가입
+        $result = $this->user_model->add($this->input->post());
+        var_dump($result);
+        // 회원 가입 진행
+        // $sess_signup->mode = $mode;
+        // $this->session->set_userdata('signup', $sess_signup);
+        // $this->_load_view('signup');    // 회원 가입
         return;
     }
     echo "wrong mode:" . $mode;

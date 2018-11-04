@@ -15,8 +15,8 @@ echo form_open('http://' . $_SERVER['HTTP_HOST'] . '/index.php/auth/signup');
   </div>
     <div class="form-group">
       <label for="reg_num"><?=lang('reg_num')?></label>
-      <input type="text" class="" id="reg_num1" name="reg_num1" value="<?php echo set_value('reg_num1'); ?>" placeholder="<?=lang('input_reg_num1')?>"> -
-      <input type="password" class="" id="reg_num2" name="reg_num2" value="<?php echo set_value('reg_num2'); ?>" placeholder="<?=lang('input_reg_num2')?>">
+      <input type="text" class="" id="reg_num1" name="reg_num1" placeholder="<?=lang('input_reg_num1')?>"> -
+      <input type="password" class="" id="reg_num2" name="reg_num2" placeholder="<?=lang('input_reg_num2')?>">
       <input type="button" class="btn" value="<?=lang('prove_name')?>">
     </div>
     <?php endif; ?>

@@ -18,6 +18,7 @@ $lang['input_phone_auth'] = '휴대폰 인증 문자';
 $lang['prove_phone'] = '휴대폰 번호 인증';
 $lang['login'] = '로그인';
 $lang['sign_up'] = '회원 가입';
+$lang['find_pwd'] = '비밀번호 변경';
 $lang['save_pwd'] = '비밀번호 저장';
 $lang['agree'] = '동의';
 $lang['cancel'] = '취소';
@@ -44,5 +45,8 @@ $lang['query_fail'] = '데이터베이스 오류가 발생 했습니다';
 $lang['email_not_found'] = '가입 되지 않은 이메일 주소 입니다';
 $lang['unknown_user'] = '사용자 정보를 확인할 수 없습니다';
 $lang['wrong_password'] = '비밀번호가 올바르지 않습니다';
+$lang['user_already_exist'] = '이미 가입한 사용자 입니다';
+$lang['email_already_exist'] = '이미 가입된 이메일 주소 입니다';
+$lang['phone_already_exist'] = '이미 가입된 휴대폰 번호 입니다';
 
 ?>
