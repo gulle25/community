@@ -34,5 +34,6 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 # Community
 # ========================================================
 web.config
-application/config/database.php
 sessions/*
+application/config/database.php
+application/libraries/appstack/*
