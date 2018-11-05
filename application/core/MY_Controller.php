@@ -60,8 +60,8 @@ class My_Controller extends CI_Controller {
           // 사용자 캐시가 존재 하지 않으면 DB 에서 정보를 읽는다
           $this->load->database();
           $this->load->model('user_model');
-          $result = $this->user_model->get('email', $this->session->email, $this->cafe_type);
-          if (!$result)
+          $user = $this->user_model->get('email', $this->session->email);
+          if ($user->errno == My_Model::DB_QUERY_FAIL)
           {
             // DB 읽기 실패, 세션 로그인 해제
             $this->_set_flash_message(lang('query_fail'));
@@ -69,7 +69,7 @@ class My_Controller extends CI_Controller {
             return false;
           }
 
-          if ($result[0]->errno != 0)
+          if ($user->errno != My_Model::DB_NO_ERROR)
           {
             // 메일 주소가 가입 되어 있지 않음, 세션 로그인 해제
             $this->_set_flash_message(lang('unknown_user'));
@@ -78,7 +78,7 @@ class My_Controller extends CI_Controller {
           }
 
           // 캐시에 저장
-          $this->user_cache = $result[0];
+          $this->user_cache = $user;
           $this->cache->save($cache_key, $this->user_cache, $this->config->item('cache_exp_user'));
         }
 

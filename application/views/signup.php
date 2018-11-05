@@ -14,9 +14,9 @@ echo form_open('http://' . $_SERVER['HTTP_HOST'] . '/index.php/auth/signup');
       <input type="name" class="form-control" id="name" name="name" value="<?php echo set_value('name'); ?>" placeholder="<?=lang('input_name')?>">
   </div>
     <div class="form-group">
-      <label for="reg_num"><?=lang('reg_num')?></label>
-      <input type="text" class="" id="reg_num1" name="reg_num1" placeholder="<?=lang('input_reg_num1')?>"> -
-      <input type="password" class="" id="reg_num2" name="reg_num2" placeholder="<?=lang('input_reg_num2')?>">
+      <label for="residence_num"><?=lang('residence_num')?></label>
+      <input type="text" class="" id="residence_num1" name="residence_num1" placeholder="<?=lang('input_residence_num1')?>"> -
+      <input type="password" class="" id="residence_num2" name="residence_num2" placeholder="<?=lang('input_residence_num2')?>">
       <input type="button" class="btn" value="<?=lang('prove_name')?>">
     </div>
     <?php endif; ?>
@@ -46,16 +46,18 @@ echo form_open('http://' . $_SERVER['HTTP_HOST'] . '/index.php/auth/signup');
     <input type="button" class="btn" value="<?=lang('prove_phone')?>">
     <?php endif; ?>
   </div>
-  <div class="form-group">
-    <label for="password"><?=lang('password')?></label>
-    <input type="password" class="form-control" id="password" name="password" placeholder="<?=lang('input_password')?>">
-  </div>
     <?php if (!isset($this->session->userdata('signup')->password_proved)): ?>
+    <div class="form-group">
+      <label for="password"><?=lang('password')?></label>
+      <input type="password" class="form-control" id="password" name="password" placeholder="<?=lang('input_password')?>">
+    </div>
     <div class="form-group">
       <label for="re_password"><?=lang('re_password')?></label>
       <input type="password" class="form-control" id="re_password" name="re_password" placeholder="<?=lang('input_re_password')?>">
     </div>
+    <a href="/"><label class="btn"><?=lang('cancel')?></label></a>
+    <button type="submit" class="btn btn-default"><?=lang('sign_up')?></button>
+    <?php else: ?>
+    <a href="/"><label class="btn"><?=lang('login')?></label></a>
     <?php endif; ?>
-  <a href="/"><label class="btn"><?=lang('cancel')?></label></a>
-  <button type="submit" class="btn btn-default"><?=lang('sign_up')?></button>
 </form>

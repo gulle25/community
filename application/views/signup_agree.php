@@ -8,16 +8,16 @@ echo form_open('http://' . $_SERVER['HTTP_HOST'] . '/index.php/auth/signup', arr
   <input type="hidden" name="mode" value="agree">
   <input type="checkbox" id="agree_all" name="agree_all">
   <?=lang('agree_all')?><br><p>
-  <input type="checkbox" id="agree_service" name="agree_service">
+  <input type="checkbox" id="agree_service" name="agree_service" <?php echo set_value('agree_service') ? "checked" : ""?>>
   <?=lang('agree_service')?><br>
   여러분을 환영합니다.<br><p>
-  <input type="checkbox" id="agree_user_info" name="agree_user_info">
+  <input type="checkbox" id="agree_user_info" name="agree_user_info" <?php echo set_value('agree_user_info') ? "checked" : ""?>>
   <?=lang('agree_user_info')?><br>
   1. 수집하는 개인정보<br><p>
-  <input type="checkbox" id="agree_location_info" name="agree_location_info">
+  <input type="checkbox" id="agree_location_info" name="agree_location_info" <?php echo set_value('agree_location_info') ? "checked" : ""?>>
   <?=lang('agree_location_info')?><br>
   제 1 조 (목적)<br><p>
-  <input type="checkbox" id="agree_event" name="agree_event">
+  <input type="checkbox" id="agree_event" name="agree_event" <?php echo set_value('agree_event') ? "checked" : ""?>>
   <?=lang('agree_event')?><br><p>
   <a href="/"><label class="btn"><?=lang('cancel')?></label></a>
   <button type="submit" class="btn btn-default"><?=lang('agree')?></button>

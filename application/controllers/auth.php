@@ -53,7 +53,7 @@ class Auth extends My_Controller {
     $this->load->database();
     $this->load->model('user_model');
     $cache = $this->user_model->login($this->input->post('email'));
-    if ($cache->errno != 0)
+    if ($cache->errno != My_Model::DB_NO_ERROR)
     {
       $this->_set_flash_message(lang($cache->errno == My_Model::DB_QUERY_FAIL ? 'query_fail' : 'email_not_found'));
       $this->_set_gnb_unsigned();
@@ -114,7 +114,7 @@ class Auth extends My_Controller {
         return;
 
       case 'agree':   // 약관 동의
-        if ($sess_signup->mode != 'begin')
+        if (!$sess_signup || $sess_signup->mode != 'begin')
         {
           $this->_redirect('/');
           return;
@@ -131,16 +131,16 @@ class Auth extends My_Controller {
         }
 
         $sess_signup->mode = $mode;
-        $sess_signup->agreement = (object) ['service' => $this->input->post('agree_service'),
-          'agree_user_info' => $this->input->post('agree_user_info'),
-          'location_info' => $this->input->post('agree_location_info'),
-          'event' => $this->input->post('agree_event') ? $this->input->post('agree_event') : 'off'];
+        $sess_signup->agree_service = $this->input->post('agree_service') ? true : false;
+        $sess_signup->agree_user_info = $this->input->post('agree_user_info') ? true : false;
+        $sess_signup->agree_location_info = $this->input->post('agree_location_info') ? true : false;
+        $sess_signup->agree_event = $this->input->post('agree_event') ? true : false;
         $this->session->set_userdata('signup', $sess_signup);
         $this->_load_view('signup');    // 회원 가입
         return;
 
       case 'apply':   // 회원 인증 및 가입
-        if ($sess_signup->mode != 'agree' && $sess_signup->mode != 'apply')
+        if (!$sess_signup || ($sess_signup->mode != 'agree' && $sess_signup->mode != 'apply'))
         {
           $this->_redirect('/');
           return;
@@ -148,13 +148,14 @@ class Auth extends My_Controller {
 
         $this->load->database();
         $this->load->model('user_model');
+        $sess_signup->mode = $mode;
 
         // var_dump($this->session);
         if (!isset($sess_signup->name_proved))
         {
           $this->form_validation->set_rules('name', lang('name'), 'required|max_length[10]');
-          $this->form_validation->set_rules('reg_num1', lang('reg_num1'), 'required|numeric|exact_length[6]');
-          $this->form_validation->set_rules('reg_num2', lang('reg_num2'), 'required|numeric|exact_length[7]');
+          $this->form_validation->set_rules('residence_num1', lang('residence_num1'), 'required|numeric|exact_length[6]');
+          $this->form_validation->set_rules('residence_num2', lang('residence_num2'), 'required|numeric|exact_length[7]');
 
           if ($this->form_validation->run() === false)
           {
@@ -163,9 +164,9 @@ class Auth extends My_Controller {
           }
 
           // 주민번호로 중복 가입 검사
-          $residence_hash = md5($this->input->post('reg_num1') . $this->input->post('reg_num2'));
+          $residence_hash = md5($this->input->post('residence_num1') . $this->input->post('residence_num2'));
           $user = $this->user_model->get('residence', $residence_hash);
-          if ($user->errno == 0)
+          if ($user->errno == My_Model::DB_NO_ERROR)
           {
             $this->_set_flash_message(lang('user_already_exist'));
             $this->_set_gnb_unsigned();
@@ -176,7 +177,8 @@ class Auth extends My_Controller {
 
           // [TODO] 실명 인증 후 처리
           $sess_signup->name = $this->input->post('name');
-          $sess_signup->regidence_hash = md5($this->input->post('reg_num1').$this->input->post('reg_num2'));
+          $sess_signup->residence_num1 = $this->input->post('residence_num1');
+          $sess_signup->residence_hash = md5($this->input->post('residence_num1').$this->input->post('residence_num2'));
           $sess_signup->name_proved = true;
         }
 
@@ -193,7 +195,7 @@ class Auth extends My_Controller {
 
           // 이메일 주소 중복 가입 검사
           $user = $this->user_model->get('email', $this->input->post('email'));
-          if ($user->errno == 0)
+          if ($user->errno == My_Model::DB_NO_ERROR)
           {
             $this->_set_flash_message(lang('email_already_exist'));
             $this->_set_gnb_unsigned();
@@ -220,7 +222,7 @@ class Auth extends My_Controller {
 
           // 휴대폰 번호 주소 중복 가입 검사
           $user = $this->user_model->get('phone', $this->input->post('phone'));
-          if ($user->errno == 0)
+          if ($user->errno == My_Model::DB_NO_ERROR)
           {
             $this->_set_flash_message(lang('phone_already_exist'));
             $this->_set_gnb_unsigned();
@@ -250,16 +252,20 @@ class Auth extends My_Controller {
           $sess_signup->password_proved = true;
         }
 
-        $result = $this->user_model->add($this->input->post());
-        var_dump($result);
         // 회원 가입 진행
-        // $sess_signup->mode = $mode;
+        $residence_class = substr($sess_signup->residence_num1, 0, 1);
+        $sess_signup->gender = ($residence_class == '1' || $residence_class == '3') ? 'M' : 'F';
+        $sess_signup->birthday = sprintf('%s%s', ($residence_class == '1' || $residence_class == '2') ? '19' : '20', $sess_signup->residence_num1);
+        // $this->session->unset_userdata('signup', false);
+        $this->session->set_userdata('is_logged_in', false);
+        // var_dump($sess_signup);
+        $result = $this->user_model->add($sess_signup);
         // $this->session->set_userdata('signup', $sess_signup);
-        // $this->_load_view('signup');    // 회원 가입
+        $this->_load_view('signup');    // 회원 가입
         return;
     }
-    echo "wrong mode:" . $mode;
-    // $this->_load_view('/');
+
+    $this->_redirect('/');
   }
 
 }

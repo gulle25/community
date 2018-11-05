@@ -16,20 +16,13 @@ class User_model extends My_Model {
     if (!$cache)
     {
       // 사용자 캐시가 존재 하지 않으면 DB 에서 정보 읽는다
-      $result = $this->db->query('CALL get_user_info(?, ?)', ['email', $email])->result();
-      if (!$result)
+      $cache = My_Model::call_single_row('CALL get_user_info(?, ?)', ['email', $email]);
+      // var_dump($result);
+      if ($cache->errno == My_Model::DB_NO_ERROR)
       {
-        return (object) ['errno' => DB_QUERY_FAIL];
+        // 캐시에 저장
+        $this->cache->save($cache_key, $cache, $this->config->item('cache_exp_user'));
       }
-      if ($result[0]->errno != 0)
-      {
-        // 메일 주소가 가입 되지 않음
-        return $result[0];
-      }
-
-      // 캐시에 저장
-      $cache = $result[0];
-      $this->cache->save($cache_key, $cache, $this->config->item('cache_exp_user'));
     }
 
     return $cache;
@@ -40,13 +33,12 @@ class User_model extends My_Model {
    */
   function get($category, $value)
   {
-    $result = $this->db->query('CALL get_user_info(?, ?)', [$category, $value])->result();
-    return $result ? $result[0] : (object) ['errno' => DB_QUERY_FAIL];
+    return My_Model::call_single_row('CALL get_user_info(?, ?)', [$category, $value]);
   }
 
   function add($info)
   {
-    return $this->db->query('CALL add_user(?, ?, ?, ?, ?, ?)', [$info->name, $info->email, $info->pwd_hash, $info->birthday, $info->residence_hash, $info->phone])->result();
+    // return My_Model::call_single_row('CALL add_user(?, ?, ?, ?, ?, ?, ?)', [$info->name, $info->email, $info->pwd_hash, $info->birthday, $info->gender, $info->residence_hash, $info->phone]);
   }
 }
 ?>
