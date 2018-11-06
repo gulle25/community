@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 
-        <main class="content">
+        <main>
           <div class="container-fluid p-0">
 
             <div class="clearfix">

@@ -37,7 +37,6 @@ class Auth extends My_Controller {
 
     $this->form_validation->set_rules('email', lang('email'), 'required|valid_email|max_length[120]');
     $this->form_validation->set_rules('password', lang('password'), 'required|min_length[4]|max_length[30]');
-    $this->form_validation->set_rules('cafe_type', 'cafe_type', 'required');
 
     if ($this->form_validation->run() === false)
     {

@@ -8,6 +8,8 @@ $lang['send_email_auth'] = '인증 문자 메일 발송';
 $lang['input_email_auth'] = '이메일 인증 문자';
 $lang['prove_email'] = '이메일 주소 인증';
 $lang['password'] = '비밀번호';
+$lang['forgot_password'] = '비밀번호를 잊어버리셨나요?';
+$lang['request_sign_up'] = '회원 가입 하시겠습니까?';
 $lang['input_password'] = '비밀번호를 입력하세요';
 $lang['re_password'] = '비밀번호 확인';
 $lang['input_re_password'] = '비밀번호를 다시 입력하세요';
@@ -30,13 +32,15 @@ $lang['residence_num2'] = '주민등록번호 뒷자리';
 $lang['input_residence_num1'] = '6자리 앞자리';
 $lang['input_residence_num2'] = '7자리 뒷자리';
 $lang['prove_name'] = '실명 인증';
-$lang['agree_all'] = '이용약관, 개인정보 수집 및 이용, 위치정보 이용약관(선택), 프로모션 안내 메일 수신(선택)에 모두 동의합니다.';
+$lang['agree_term'] = '이용 약관 동의';
+$lang['agree_all'] = '이용약관, 개인정보 수집 및 이용, 위치정보 이용약관, 프로모션 안내 메일 수신(선택)에 모두 동의합니다.';
 $lang['agree_service'] = '서비스 약관 동의 (필수)';
 $lang['agree_user_info'] = '개인정보 수집 및 이용에 대한 동의 (필수)';
 $lang['agree_location_info'] = '위치정보 이용약관 동의 (필수)';
 $lang['agree_event'] = '이벤트 등 프로모션 알림 수신 (선택)';
 
 // message
+$lang['welcome'] = '어서 오세요';
 $lang['maintenance'] = '서비스 점검중 입니다';
 $lang['login_success'] = '로그인 되었습니다';
 

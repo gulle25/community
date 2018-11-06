@@ -174,7 +174,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           </div>
         </nav>
 
-
         <!-- GNB Content -->
       <?php foreach ($gnb as $item): ?>
       <?php switch ($item->type):
@@ -184,7 +183,3 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       <?php endswitch; ?>
       <?php endforeach; ?>
 
-        <!-- Flash Message -->
-      <?php if ($this->session->flashdata('message')): ?>
-        <div class="alert alert-primary" role="alert"><?=$this->session->flashdata('message')['message']?></div>
-      <?php endif; ?>
