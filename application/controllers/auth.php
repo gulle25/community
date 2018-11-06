@@ -246,7 +246,7 @@ class Auth extends My_Controller {
             return;
           }
 
-          // [TODO] 비밀번호 인증 후 처리
+          // 비밀번호 인증 후 처리
           $sess_signup->pwd_hash = md5($this->input->post('password'));
           $sess_signup->password_proved = true;
         }
