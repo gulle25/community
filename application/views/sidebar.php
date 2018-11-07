@@ -5,7 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div class="d-flex">
       <nav class="sidebar sidebar-sticky">
         <div class="sidebar-content">
-          <a class="sidebar-brand" href="index.html">
+          <a class="sidebar-brand" href="/">
             <i class="align-middle" data-feather="box"></i>
             <span class="align-middle">AppStack</span>
           </a>

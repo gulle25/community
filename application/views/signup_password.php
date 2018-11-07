@@ -27,9 +27,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
     <?php echo form_open('http://' . $_SERVER['HTTP_HOST'] . '/index.php/auth/signup', array('id' => 'validation-form')); ?>
               <input type="hidden" name="mode" value="password">
-              <div class="form-group">
-                <label class="col-form-label" for="email">비밀번호</label>
-                <input type="text" class="form-control col-sm-6" id="password" name="password" placeholder="<?=lang('input_password')?>">
+              <br>
+              <div class="row">
+                <label class="col-form-label col-sm-3" for="password"><?=lang('password')?></label>
+                <div class="form-group col-sm-6">
+                  <input type="password" class="form-control" id="password" name="password" placeholder="<?=lang('input_password')?>">
+                </div>
+              </div>
+              <div class="row">
+                <label class="col-form-label col-sm-3" for="re_password"><?=lang('re_password')?></label>
+                <div class="form-group col-sm-6">
+                  <input type="password" class="form-control" id="re_password" name="re_password" placeholder="<?=lang('input_re_password')?>">
+                </div>
               </div>
               <a href="/"><label class="btn"><?=lang('cancel')?></label></a>
               <button type="submit" class="btn btn-default"><?=lang('sign_up')?></button>
@@ -48,6 +57,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           required: true,
           minlength: 4,
           maxlength: 20
+        },
+        're_password': {
+          required: true,
+          equalTo: 'input[name="password"]'
         }
       },
       // Errors

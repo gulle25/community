@@ -5,7 +5,7 @@ $lang['board'] = '보드';
 $lang['email'] = '이메일 주소';
 $lang['input_email'] = '이메일 주소를 입력하세요';
 $lang['send_email_auth'] = '인증 문자 메일 발송';
-$lang['input_email_auth'] = '이메일 인증 문자';
+$lang['input_email_auth'] = '이메일 인증 번호를 입력하세요';
 $lang['prove_email'] = '이메일 주소 인증';
 $lang['password'] = '비밀번호';
 $lang['forgot_password'] = '비밀번호를 잊어버리셨나요?';
@@ -55,5 +55,6 @@ $lang['user_already_exist'] = '이미 가입한 사용자 입니다';
 $lang['email_already_exist'] = '이미 가입된 이메일 주소 입니다';
 $lang['phone_already_exist'] = '이미 가입된 휴대폰 번호 입니다';
 $lang['auth_fail'] = '인증에 실패 하였습니다';
+$lang['signup_success'] = '회원 가입을 축하 합니다';
 
 ?>

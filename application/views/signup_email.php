@@ -27,9 +27,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
     <?php echo form_open('http://' . $_SERVER['HTTP_HOST'] . '/index.php/auth/signup', array('id' => 'validation-form')); ?>
               <input type="hidden" name="mode" value="email">
-              <div class="form-group">
-                <label class="col-form-label" for="email">이메일 주소</label>
-                <input type="text" class="form-control col-sm-6" id="email" name="email" value="<?php echo set_value('email'); ?>" placeholder="<?=lang('input_email')?>">
+              <br>
+              <div class="row">
+                <label class="col-form-label col-sm-3" for="email">이메일 주소</label>
+                <div class="form-group col-sm-6">
+                  <input type="text" class="form-control" id="email" name="email" value="<?php echo set_value('email'); ?>" placeholder="<?=lang('input_email')?>">
+                </div>
               </div>
               <a href="/"><label class="btn"><?=lang('cancel')?></label></a>
               <button type="submit" class="btn btn-default"><?=lang('next')?></button>

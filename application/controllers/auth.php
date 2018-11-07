@@ -51,8 +51,8 @@ class Auth extends My_Controller {
     $this->cafe_type = $this->input->post('cafe_type');
     $this->load->database();
     $this->load->model('user_model');
-    $cache = $this->user_model->login($this->input->post('email'));
-    if ($cache->errno != My_Model::DB_NO_ERROR)
+    $cache = $this->user_model->get('email', $this->input->post('email'), false, true);
+    if (!$cache)
     {
       $this->_set_flash_message(lang($cache->errno == My_Model::DB_QUERY_FAIL ? 'query_fail' : 'email_not_found'));
       $this->_set_gnb_unsigned();
@@ -76,7 +76,7 @@ class Auth extends My_Controller {
     $this->_set_flash_message(lang('login_success'));
     $this->session->set_userdata('is_logged_in', true);
     $this->session->set_userdata('email', $this->input->post('email'));
-
+    // var_dump($cache);
     redirect('http://' . site_url($this->input->get('returnURL')));
   }
 
@@ -204,6 +204,49 @@ class Auth extends My_Controller {
         $sess_signup->mode = $mode;
         $this->session->set_userdata('signup', $sess_signup);
         $this->_load_view('signup_password');    // 비밀번호 등록
+        return;
+
+      case 'password':   // 비밀번호 등록
+        if (!$sess_signup || $sess_signup->mode != 'email_auth')
+        {
+          $this->_redirect('/');
+          return;
+        }
+
+        $this->form_validation->set_rules('password', lang('password'), 'required|exact_length[4]|numeric');
+        $this->form_validation->set_rules('re_password', lang('re_password'), 'required|matches[password]');
+        if ($this->form_validation->run() === false)
+        {
+          $this->_load_view('signup_password');
+          return;
+        }
+
+        // 계정 생성
+        $pwd_hash = md5($this->input->post('password'));
+        $sess_signup->name = 'unregistered  ';
+        $sess_signup->pwd_hash = $pwd_hash;
+        $sess_signup->residence_hash = md5($sess_signup->email);
+        $sess_signup->birthday = 99999999;
+        $sess_signup->gender = 'N';
+        $sess_signup->phone = '';
+        $sess_signup->info = (object)[];
+        $this->session->unset_userdata('signup', false);
+        $this->session->set_userdata('is_logged_in', false);
+
+        $this->load->database();
+        $this->load->model('user_model');
+        $user = $this->user_model->add($sess_signup);
+        if ($user->errno != My_Model::DB_NO_ERROR)
+        {
+          // 오류
+          $this->_set_flash_message(lang('query_fail'));
+          $this->_redirect('/');
+          return;
+        }
+
+        // 가입 성공
+        $this->_set_flash_message(lang('signup_success'));
+        $this->_redirect('/');
         return;
 
       case 'apply':   // 회원 인증 및 가입
