@@ -135,7 +135,75 @@ class Auth extends My_Controller {
         $sess_signup->agree_location_info = $this->input->post('agree_location_info') ? true : false;
         $sess_signup->agree_event = $this->input->post('agree_event') ? true : false;
         $this->session->set_userdata('signup', $sess_signup);
-        $this->_load_view('signup');    // 회원 가입
+        // $this->_load_view('signup');    // 회원 가입
+        $this->_load_view('signup_email');    // 회원 가입
+        return;
+
+      case 'email':   // 이메일 주소 검증
+        if (!$sess_signup || $sess_signup->mode != 'agree')
+        {
+          $this->_redirect('/');
+          return;
+        }
+
+        $this->form_validation->set_rules('email', lang('email'), 'required|valid_email|max_length[120]');
+        if ($this->form_validation->run() === false)
+        {
+          $this->_load_view('signup_email');
+          return;
+        }
+
+        // 이메일 주소 중복 검사
+        $email = $this->input->post('email');
+        $this->load->database();
+        $this->load->model('user_model');
+        $user = $this->user_model->get('email', $email);
+        if ($user->errno == My_Model::DB_NO_ERROR)
+        {
+          // 이미 가입된 이메일 주소
+          $this->_set_flash_message(lang('user_already_exist'));
+          $this->_load_view('signup_email');
+          return;
+        }
+
+        $email_auth = mt_rand(100000, 999999);
+        $sess_signup->email_auth = $email_auth;
+
+        // [TODO] 인증 메일 발송
+
+        $sess_signup->mode = $mode;
+        $sess_signup->email = $email;
+        $this->session->set_userdata('signup', $sess_signup);
+        $this->_load_view('signup_email_auth');    // 인증 메일 확인
+        return;
+
+      case 'email_auth':   // 이메일 인증 문자 확인
+        if (!$sess_signup || $sess_signup->mode != 'email')
+        {
+          $this->_redirect('/');
+          return;
+        }
+
+        $this->form_validation->set_rules('email_auth', lang('auth_num'), 'required|exact_length[6]|numeric');
+        if ($this->form_validation->run() === false)
+        {
+          $this->_load_view('signup_email_auth');
+          return;
+        }
+
+        // 이메일 인증 문자 검사
+        $email_auth = $this->input->post('email_auth');
+        if ($email_auth != $sess_signup->email_auth)
+        {
+          // 인증 문자 다름
+          $this->_set_flash_message(lang('auth_fail'));
+          $this->_load_view('signup_email_auth');
+          return;
+        }
+
+        $sess_signup->mode = $mode;
+        $this->session->set_userdata('signup', $sess_signup);
+        $this->_load_view('signup_password');    // 비밀번호 등록
         return;
 
       case 'apply':   // 회원 인증 및 가입

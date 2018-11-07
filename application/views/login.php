@@ -2,8 +2,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 
-        <main class="content">
-          <div class="container-fluid p-0">
+        <main>
+          <!-- <div class="container-fluid p-0"> -->
 
             <!-- Flash Message -->
       <?php if ($this->session->flashdata('message')): ?>
@@ -23,43 +23,44 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
       <?php endif; ?>
 
-            <div class="row h-100">
-              <div class="col-sm-12 col-md-12 col-lg-12 mx-auto d-table h-100">
-                <div class="d-table-cell align-middle">
-                  <div class="card">
+            <!-- <div class="row h-100"> -->
+              <!-- <div class="col-sm-12 col-md-12 col-lg-12 mx-auto d-table h-100"> -->
+                <!-- <div class="d-table-cell align-middle"> -->
+                  <!-- <div class="card"> -->
                     <div class="card-body">
 
                       <!-- Sign-in Form -->
             <?php echo form_open('http://' . $_SERVER['HTTP_HOST'] . '/index.php/auth/authenticate', array('id' => 'validation-form')); ?>
-                        <div class="form-group row">
+                        <div class="row">
                           <label class="col-form-label col-sm-3 text-sm-right"><?=lang('email')?></label>
-                          <div class="col-sm-9">
+                          <div class="form-group col-sm-8">
                             <input type="text" class="form-control" name="email" placeholder="<?=lang('input_email')?>" value="<?=set_value('email')?>">
                           </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="row">
                           <label class="col-form-label col-sm-3 text-sm-right"><?=lang('password')?></label>
-                          <div class="col-sm-9">
+                          <div class="form-group col-sm-8">
                             <input type="password" class="form-control" name="password" placeholder="<?=lang('input_password')?>">
                           </div>
                         </div>
                         <div class="text-center mt-3">
                           <button type="submit" class="btn btn-lg btn-primary"><?=lang('login')?></button>
                         </div>
-                        <div class="form-group">
-                          <a href="#"><?=lang('forgot_password')?></a><p>
-                        </div>
-                        <div class="form-group">
-                          <a href="/index.php/auth/signup?mode=begin"><?=lang('request_sign_up')?></a><p>
+                        <div class="form-group row">
+                          <label class="col-form-label col-sm-3 text-sm-right"></label>
+                          <div class="col-sm-9">
+                            <br>
+                            <a href="#"><?=lang('forgot_password')?></a><br>
+                            <a href="/index.php/auth/signup?mode=begin"><?=lang('request_sign_up')?></a>
+                          </div>
                         </div>
                       </form>
-
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+                  <!-- </div> -->
+                <!-- </div> -->
+              <!-- </div> -->
+            <!-- </div> -->
+          <!-- </div> -->
         </main>
 
             <script>

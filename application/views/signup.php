@@ -2,8 +2,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 
-        <main class="content">
-          <div class="container-fluid p-0">
+        <main>
+          <!-- <div class="container-fluid p-0"> -->
 
             <!-- Flash Message -->
       <?php if ($this->session->flashdata('message')): ?>
@@ -23,37 +23,40 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
       <?php endif; ?>
 
-            <div class="row h-100">
-              <div class="col-sm-12 col-md-12 col-lg-12 mx-auto d-table h-100">
-                <div class="d-table-cell align-middle">
-                  <div class="card">
+            <!-- <div class="row h-100"> -->
+              <!-- <div class="col-sm-12 col-md-12 col-lg-12 mx-auto d-table h-100"> -->
+                <!-- <div class="d-table-cell align-middle"> -->
+                  <!-- <div class="card"> -->
                     <div class="card-body">
-
-              <?php echo form_open('http://' . $_SERVER['HTTP_HOST'] . '/index.php/auth/signup?mode=apply', array('id' => 'validation-form')); ?>
+                      <div class="card-header">
+                        <h5 class="card-title"><?=lang('agree_term')?></h5>
+                        <!-- <h6 class="card-subtitle text-muted">약관 동의</h6> -->
+                      </div>
+              <?php echo form_open('http://' . $_SERVER['HTTP_HOST'] . '/index.php/auth/signup', array('id' => 'validation-form')); ?>
 
                         <input type="hidden" name="mode" value="apply">
 
-                        <div class="form-group row">
+                        <div class="row">
                           <label class="col-form-label col-sm-3 text-sm-right" for="name"><?=lang('name')?></label>
-                          <div class="col-sm-9">
+                          <div class="form-group col-sm-9">
                           <?php if (isset($this->session->userdata('signup')->name_proved)): ?>
                             <span><?=$this->session->userdata('signup')->name?></span>
                           <?php else: ?>
                             <input type="text" class="form-control col-sm-6" id="name" name="name" value="<?php echo set_value('name'); ?>" placeholder="<?=lang('input_name')?>">
                           </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="row">
                           <label class="col-form-label col-sm-3 text-sm-right" for="residence_num"><?=lang('residence_num')?></label>
-                          <div class="col-sm-9">
+                          <div class="form-group col-sm-9">
                             <input type="text" class="col-sm-3" id="residence_num1" name="residence_num1" placeholder="<?=lang('input_residence_num1')?>"> -
                             <input type="password" class="col-sm-3" id="residence_num2" name="residence_num2" placeholder="<?=lang('input_residence_num2')?>">
                             <input type="button" class="btn" value="<?=lang('prove_name')?>">
                           <?php endif; ?>
                           </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="row">
                           <label class="col-form-label col-sm-3 text-sm-right" for="email"><?=lang('email')?></label>
-                          <div class="col-sm-9">
+                          <div class="form-group col-sm-9">
                           <?php if (isset($this->session->userdata('signup')->email_proved)): ?>
                             <?=$this->session->userdata('signup')->email?>
                           <?php else: ?>
@@ -61,17 +64,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <input type="button" class="btn" value="<?=lang('send_email_auth')?>">
                           </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="row">
                           <label class="col-form-label col-sm-3 text-sm-right"></label>
-                          <div class="col-sm-9">
+                          <div class="form-group col-sm-9">
                             <input type="text" class="col-sm-6" id="prove_email" name="prove_email" placeholder="<?=lang('input_email_auth')?>">
                             <input type="button" class="btn" value="<?=lang('prove_email')?>">
                         <?php endif; ?>
                           </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="row">
                           <label class="col-form-label col-sm-3 text-sm-right" for="phone"><?=lang('phone')?></label>
-                          <div class="col-sm-9">
+                          <div class="form-group col-sm-9">
                           <?php if (isset($this->session->userdata('signup')->phone_proved)): ?>
                             <?=$this->session->userdata('signup')->phone?>
                           <?php else: ?>
@@ -79,24 +82,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <input type="button" class="btn" value="<?=lang('send_phone_auth')?>">
                           </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="row">
                           <label class="col-form-label col-sm-3 text-sm-right"></label>
-                          <div class="col-sm-9">
+                          <div class="form-group col-sm-9">
                             <input type="text" class="col-sm-6" id="prove_phone" name="prove_phone" placeholder="<?=lang('input_phone_auth')?>">
                             <input type="button" class="btn" value="<?=lang('prove_phone')?>">
                           <?php endif; ?>
                           </div>
                         </div>
                           <?php if (!isset($this->session->userdata('signup')->password_proved)): ?>
-                        <div class="form-group row">
+                        <div class="row">
                           <label class="col-form-label col-sm-3 text-sm-right" for="password"><?=lang('password')?></label>
-                          <div class="col-sm-9">
+                          <div class="form-group col-sm-9">
                             <input type="password" class="form-control col-sm-6" id="password" name="password" placeholder="<?=lang('input_password')?>">
                           </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="row">
                           <label class="col-form-label col-sm-3 text-sm-right" for="re_password"><?=lang('re_password')?></label>
-                          <div class="col-sm-9">
+                          <div class="form-group col-sm-9">
                             <input type="password" class="form-control col-sm-6" id="re_password" name="re_password" placeholder="<?=lang('input_re_password')?>">
                           </div>
                         </div>
@@ -107,11 +110,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <?php endif; ?>
                       </form>
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+                  <!-- </div> -->
+                <!-- </div> -->
+              <!-- </div> -->
+            <!-- </div> -->
+          <!-- </div> -->
         </main>
 
 <script>

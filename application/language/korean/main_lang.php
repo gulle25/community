@@ -23,7 +23,9 @@ $lang['sign_up'] = '회원 가입';
 $lang['find_pwd'] = '비밀번호 변경';
 $lang['save_pwd'] = '비밀번호 저장';
 $lang['agree'] = '동의';
+$lang['auth_num'] = '인증 번호';
 $lang['cancel'] = '취소';
+$lang['next'] = '다음';
 $lang['name'] = '이름';
 $lang['input_name'] = '실명을 입력 하세요';
 $lang['residence_num'] = '주민등록번호';
@@ -52,5 +54,6 @@ $lang['wrong_password'] = '비밀번호가 올바르지 않습니다';
 $lang['user_already_exist'] = '이미 가입한 사용자 입니다';
 $lang['email_already_exist'] = '이미 가입된 이메일 주소 입니다';
 $lang['phone_already_exist'] = '이미 가입된 휴대폰 번호 입니다';
+$lang['auth_fail'] = '인증에 실패 하였습니다';
 
 ?>

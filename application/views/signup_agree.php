@@ -2,8 +2,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 
-        <main class="content">
-          <div class="container-fluid p-0">
+        <main>
+          <!-- <div class="container-fluid p-0"> -->
 
             <!-- Flash Message -->
       <?php if ($this->session->flashdata('message')): ?>
@@ -23,16 +23,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
       <?php endif; ?>
 
-            <div class="row h-100">
-              <div class="col-sm-12 col-md-12 col-lg-12 mx-auto d-table h-100">
-                <div class="d-table-cell align-middle">
-                  <div class="card">
+            <!-- <div class="row h-100"> -->
+              <!-- <div class="col-sm-12 col-md-12 col-lg-12 mx-auto d-table h-100"> -->
+                <!-- <div class="d-table-cell align-middle"> -->
+                  <!-- <div class="card"> -->
                     <div class="card-body">
                       <div class="card-header">
                         <h5 class="card-title"><?=lang('agree_term')?></h5>
                         <!-- <h6 class="card-subtitle text-muted">약관 동의</h6> -->
                       </div>
-              <?php echo form_open('http://' . $_SERVER['HTTP_HOST'] . '/index.php/auth/signup?mode=agree', array('id' => 'validation-form')); ?>
+              <?php echo form_open('http://' . $_SERVER['HTTP_HOST'] . '/index.php/auth/signup', array('id' => 'validation-form')); ?>
 
                         <input type="hidden" name="mode" value="agree">
 
@@ -79,11 +79,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                       </form>
 
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+                  <!-- </div> -->
+                <!-- </div> -->
+              <!-- </div> -->
+            <!-- </div> -->
+          <!-- </div> -->
         </main>
 
 
