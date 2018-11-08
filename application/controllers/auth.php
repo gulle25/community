@@ -75,6 +75,7 @@ class Auth extends My_Controller {
     // 인증 성공, 세션에 저장
     $this->_set_flash_message(lang('login_success'));
     $this->session->set_userdata('is_logged_in', true);
+    $this->session->set_userdata('userno', $cache->userno);
     $this->session->set_userdata('email', $this->input->post('email'));
     // var_dump($cache);
     redirect('http://' . site_url($this->input->get('returnURL')));
@@ -157,7 +158,7 @@ class Auth extends My_Controller {
         $email = $this->input->post('email');
         $this->load->database();
         $this->load->model('user_model');
-        $user = $this->user_model->get('email', $email);
+        $user = $this->user_model->get('email', $email, false, false);
         if ($user->errno == My_Model::DB_NO_ERROR)
         {
           // 이미 가입된 이메일 주소
@@ -275,7 +276,7 @@ class Auth extends My_Controller {
 
           // 주민번호로 중복 가입 검사
           $residence_hash = md5($this->input->post('residence_num1') . $this->input->post('residence_num2'));
-          $user = $this->user_model->get('residence', $residence_hash);
+          $user = $this->user_model->get('residence', $residence_hash, false, false);
           if ($user->errno == My_Model::DB_NO_ERROR)
           {
             $this->_set_flash_message(lang('user_already_exist'));
@@ -304,7 +305,7 @@ class Auth extends My_Controller {
           }
 
           // 이메일 주소 중복 가입 검사
-          $user = $this->user_model->get('email', $this->input->post('email'));
+          $user = $this->user_model->get('email', $this->input->post('email'), false, false);
           if ($user->errno == My_Model::DB_NO_ERROR)
           {
             $this->_set_flash_message(lang('email_already_exist'));
@@ -331,7 +332,7 @@ class Auth extends My_Controller {
           }
 
           // 휴대폰 번호 주소 중복 가입 검사
-          $user = $this->user_model->get('phone', $this->input->post('phone'));
+          $user = $this->user_model->get('phone', $this->input->post('phone'), false, false);
           if ($user->errno == My_Model::DB_NO_ERROR)
           {
             $this->_set_flash_message(lang('phone_already_exist'));

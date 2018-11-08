@@ -26,7 +26,7 @@ class User_model extends My_Model {
     $user = My_Model::call_single_row('CALL get_user_info(?, ?, ?)', [$category, $value, $is_login]);
     if ($user->errno != My_Model::DB_NO_ERROR)
     {
-      return null;
+      return $user;
     }
 
     // JSON -> Objet

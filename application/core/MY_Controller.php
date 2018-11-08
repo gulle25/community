@@ -46,13 +46,13 @@ class My_Controller extends CI_Controller {
     function _is_logged_in()
     {
         // 사용자 세션 확인
-        if (!$this->session->is_logged_in || !$this->session->email)
+        if (!$this->session->is_logged_in || !$this->session->userno)
         {
             return false;
         }
 
         // 사용자 캐시 확인
-        $cache_key = CACHE_KEY_USER . md5($this->session->email);
+        $cache_key = CACHE_KEY_USER . md5($this->session->userno);
         $this->user_cache = $this->cache->get($cache_key);
         $this->cafe_type = $this->session->cafe_type;
         if (!$this->user_cache)
@@ -60,7 +60,7 @@ class My_Controller extends CI_Controller {
           // 사용자 캐시가 존재 하지 않으면 DB 에서 정보를 읽는다
           $this->load->database();
           $this->load->model('user_model');
-          $user = $this->user_model->get('email', $this->session->email);
+          $user = $this->user_model->get('userno', $this->session->userno, false, false);
           if ($user->errno == My_Model::DB_QUERY_FAIL)
           {
             // DB 읽기 실패, 세션 로그인 해제
@@ -71,7 +71,7 @@ class My_Controller extends CI_Controller {
 
           if ($user->errno != My_Model::DB_NO_ERROR)
           {
-            // 메일 주소가 가입 되어 있지 않음, 세션 로그인 해제
+            // 사용자를 찾을 수 없음, 세션 로그인 해제
             $this->_set_flash_message(lang('unknown_user'));
             $this->session->unset_userdata('is_logged_in');
             return false;
