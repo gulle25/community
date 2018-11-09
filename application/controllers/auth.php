@@ -20,8 +20,8 @@ class Auth extends My_Controller {
     // 로그인 폼 출력
     $this->load->library('form_validation');
 
-    $this->_set_gnb_unsigned();
-    $this->_set_sidebar_unsigned();
+    $this->_set_gnb();
+    $this->_set_sidebar();
     $this->_load_view('login');
   }
 
@@ -41,8 +41,8 @@ class Auth extends My_Controller {
     if ($this->form_validation->run() === false)
     {
       // 폼 검증이 완료 되지 않으면 다시 로그인 폼 출력
-      $this->_set_gnb_unsigned();
-      $this->_set_sidebar_unsigned();
+      $this->_set_gnb();
+      $this->_set_sidebar();
       $this->_load_view('login');
       return;
     }
@@ -51,23 +51,23 @@ class Auth extends My_Controller {
     $this->cafe_type = $this->input->post('cafe_type');
     $this->load->database();
     $this->load->model('user_model');
-    $cache = $this->user_model->get('email', $this->input->post('email'), false, true);
-    if (!$cache)
+    $user = $this->user_model->get('email', $this->input->post('email'), false, true);
+    if ($user->errno != My_Model::DB_NO_ERROR)
     {
-      $this->_set_flash_message(lang($cache->errno == My_Model::DB_QUERY_FAIL ? 'query_fail' : 'email_not_found'));
-      $this->_set_gnb_unsigned();
-      $this->_set_sidebar_unsigned();
+      $this->_set_flash_message(lang($user->errno == My_Model::DB_QUERY_FAIL ? 'query_fail' : 'email_not_found'));
+      $this->_set_gnb();
+      $this->_set_sidebar();
       $this->_load_view('login');
       return;
     }
 
     $pwd_hash = md5($this->input->post('password'));
-    if ($cache->pwd_hash != $pwd_hash)
+    if ($user->pwd_hash != $pwd_hash)
     {
       // 비밀번호 틀림
       $this->_set_flash_message(lang('wrong_password'));
-      $this->_set_gnb_unsigned();
-      $this->_set_sidebar_unsigned();
+      $this->_set_gnb();
+      $this->_set_sidebar();
       $this->_load_view('login');
       return;
     }
@@ -75,9 +75,10 @@ class Auth extends My_Controller {
     // 인증 성공, 세션에 저장
     $this->_set_flash_message(lang('login_success'));
     $this->session->set_userdata('is_logged_in', true);
-    $this->session->set_userdata('userno', $cache->userno);
+    $this->session->set_userdata('userno', $user->userno);
     $this->session->set_userdata('email', $this->input->post('email'));
-    // var_dump($cache);
+    $this->session->set_userdata('grade', $user->grade);
+    // var_dump($user);
     redirect('http://' . site_url($this->input->get('returnURL')));
   }
 
@@ -94,8 +95,8 @@ class Auth extends My_Controller {
       return;
     }
 
-    $this->_set_gnb_unsigned();
-    $this->_set_sidebar_unsigned();
+    $this->_set_gnb();
+    $this->_set_sidebar();
 
     // 회원 가입 폼 출력
     $this->load->library('form_validation');
@@ -280,8 +281,8 @@ class Auth extends My_Controller {
           if ($user->errno == My_Model::DB_NO_ERROR)
           {
             $this->_set_flash_message(lang('user_already_exist'));
-            $this->_set_gnb_unsigned();
-            $this->_set_sidebar_unsigned();
+            $this->_set_gnb();
+            $this->_set_sidebar();
             $this->_load_view('signup');
             return;
           }
@@ -309,8 +310,8 @@ class Auth extends My_Controller {
           if ($user->errno == My_Model::DB_NO_ERROR)
           {
             $this->_set_flash_message(lang('email_already_exist'));
-            $this->_set_gnb_unsigned();
-            $this->_set_sidebar_unsigned();
+            $this->_set_gnb();
+            $this->_set_sidebar();
             $this->_load_view('signup');
             return;
           }
@@ -336,8 +337,8 @@ class Auth extends My_Controller {
           if ($user->errno == My_Model::DB_NO_ERROR)
           {
             $this->_set_flash_message(lang('phone_already_exist'));
-            $this->_set_gnb_unsigned();
-            $this->_set_sidebar_unsigned();
+            $this->_set_gnb();
+            $this->_set_sidebar();
             $this->_load_view('signup');
             return;
           }

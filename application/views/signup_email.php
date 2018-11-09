@@ -7,7 +7,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <?php if ($this->session->flashdata('message')): ?>
           <div class="alert alert-primary" role="alert">
             <div class="alert-message">
-              <?=$this->session->flashdata('message')['message']?>
+              <?php echo $this->session->flashdata('message')['message']; ?>
+              <?php $this->session->set_flashdata('message'); ?>
             </div>
           </div>
     <?php endif; ?>

@@ -5,14 +5,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <main>
           <!-- <div class="container-fluid p-0"> -->
 
-            <!-- Flash Message -->
-      <?php if ($this->session->flashdata('message')): ?>
-            <div class="alert alert-primary" role="alert">
-              <div class="alert-message">
-                <?=$this->session->flashdata('message')['message']?>
-              </div>
+          <!-- Flash Message -->
+    <?php if ($this->session->flashdata('message')): ?>
+          <div class="alert alert-primary" role="alert">
+            <div class="alert-message">
+              <?php echo $this->session->flashdata('message')['message']; ?>
+              <?php $this->session->set_flashdata('message'); ?>
             </div>
-      <?php endif; ?>
+          </div>
+    <?php endif; ?>
 
             <!-- Form validation Error -->
       <?php if (validation_errors()): ?>

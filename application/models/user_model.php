@@ -23,8 +23,8 @@ class User_model extends My_Model {
     }
 
     // DB 에서 정보 읽기
-    $user = My_Model::call_single_row('CALL get_user_info(?, ?, ?)', [$category, $value, $is_login]);
-    if ($user->errno != My_Model::DB_NO_ERROR)
+    $user = parent::call_single_row('CALL get_user_info(?, ?, ?)', [$category, $value, $is_login]);
+    if ($user->errno != parent::DB_NO_ERROR)
     {
       return $user;
     }
@@ -50,15 +50,13 @@ class User_model extends My_Model {
 
   function add($info)
   {
-    return My_Model::call_single_row('CALL add_user(?, ?, ?, ?, ?, ?, ?, ?)', [$info->name, $info->email, $info->pwd_hash, $info->birthday, $info->gender, $info->residence_hash, $info->phone, json_encode($info->info)]);
+    return parent::call_single_row('CALL add_user(?, ?, ?, ?, ?, ?, ?, ?)', [$info->name, $info->email, $info->pwd_hash, $info->birthday, $info->gender, $info->residence_hash, $info->phone, json_encode($info->info)]);
   }
 
   function update($userno, $data)
   {
-    $query = My_Model::make_update_query('user_mast', 'userno', $userno, $data);
+    $query = parent::make_update_query('user_mast', (object) ['userno' => $userno], $data);
     $result = $this->db->query($query);
-    echo $query . '<br>';
-    var_dump($result);
   }
 }
 ?>

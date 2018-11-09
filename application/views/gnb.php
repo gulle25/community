@@ -2,7 +2,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 ?>
-
       <div class="main">
 
   <?php if (ENVIRONMENT == 'development'): ?>
@@ -11,16 +10,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="alert alert-primary" role="alert">[Testing]</div>
   <?php endif; ?>
 
-
         <nav class="navbar navbar-expand navbar-light bg-white">
           <a class="sidebar-toggle d-flex mr-2">
             <i class="hamburger align-self-center"></i>
           </a>
 
-
           <div class="navbar-collapse collapse">
             <ul class="navbar-nav ml-auto">
-              <li class="nav-item dropdown">
+          <?php if ($this->session->is_logged_in): ?>
+              <span class="align-self-left">Logged In</span>
+          <?php endif; ?>
+<!--               <li class="nav-item dropdown">
                 <a class="nav-icon dropdown-toggle" href="#" id="messagesDropdown" data-toggle="dropdown">
                   <div class="position-relative">
                     <i class="align-middle" data-feather="message-circle"></i>
@@ -87,8 +87,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <a href="#" class="text-muted">Show all messages</a>
                   </div>
                 </div>
-              </li>
-              <li class="nav-item dropdown">
+              </li>-->
+ <!--               <li class="nav-item dropdown">
                 <a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-toggle="dropdown">
                   <div class="position-relative">
                     <i class="align-middle" data-feather="bell-off"></i>
@@ -151,8 +151,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <a href="#" class="text-muted">Show all notifications</a>
                   </div>
                 </div>
-              </li>
-              <li class="nav-item dropdown">
+              </li> -->
+<!--               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" data-toggle="dropdown">
                   <span class="d-inline-block d-md-none">
                     <i class="align-middle" data-feather="settings"></i>
@@ -169,17 +169,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <a class="dropdown-item" href="#">Help</a>
                   <a class="dropdown-item" href="#">Sign out</a>
                 </div>
+              </li> -->
+              <li class="nav-itemk">
+                <a class="" href="/">
+                  <i class="align-middle" data-feather="home"></i>
+                </a>
               </li>
             </ul>
           </div>
         </nav>
 
         <!-- GNB Content -->
-      <?php foreach ($gnb as $item): ?>
+<!--       <?php foreach ($gnb as $item): ?>
       <?php switch ($item->type):
           case 'menubar': ?>
             <button id="menu" class="ui button">Menu</button>
       <?php break; ?>
       <?php endswitch; ?>
       <?php endforeach; ?>
-
+ -->

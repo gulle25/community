@@ -8,7 +8,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="Responsive Bootstrap 4 Admin Template">
   <meta name="author" content="Bootlab">
-  <title>AppStack - Responsive Admin Template</title>
+  <title>Community - Responsive Admin Template</title>
   <link href="/application/libraries/appstack/dist/css/app.css" rel="stylesheet">
 </head>
 <body>

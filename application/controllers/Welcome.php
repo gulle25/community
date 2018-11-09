@@ -22,8 +22,8 @@ class Welcome extends My_Controller {
     }
 
     // 로그인 되어진 메인 페이지
-    $this->_set_gnb_home();
-    $this->_set_sidebar_home();
+    $this->_set_gnb();
+    $this->_set_sidebar();
     $this->_load_view('main');
   }
 }

@@ -32,7 +32,7 @@ class My_Model extends CI_Model {
     return $this->call_multi_row($query, $param)[0];
   }
 
-  public function make_update_query($table, $key_col, $key_val, $data)
+  public function make_update_query($table, $key, $data)
   {
     $first = true;
     $values = [];
@@ -40,35 +40,55 @@ class My_Model extends CI_Model {
 
     foreach($data as $col => $val)
     {
-      if ($first)
-      {
-        $query = $query . ', ';
-      }
-      else
-      {
+      if ($first) {
         $first = false;
       }
+      else {
+        $query = $query . ', ';
+      }
 
-      $query = $query . $col . ' = ';
-      if (is_float($val) || is_int($val) || is_numeric($val))
-      {
+      $query = $query . '`' . $col . '` = ';
+      if (is_float($val) || is_int($val) || is_numeric($val)) {
         $query = $query . $val;
       }
-      else if (is_string($val))
-      {
+      else if (is_string($val)) {
         $query = $query . '\'' . $val . '\'';
       }
-      else if (is_bool($val))
-      {
+      else if (is_bool($val)) {
         $query = $query . ($val ? 'TRUE' : 'FALSE');
       }
-      else if (is_array($val) || is_object($val))
-      {
+      else if (is_array($val) || is_object($val)) {
         $query = $query . '\'' . json_encode($val) . '\'';
       }
     }
 
-    $query = $query . ' WHERE ' . $key_col . ' = "' . $key_val . '"';
+    $first = true;
+    foreach($key as $col => $val)
+    {
+      if ($first) {
+        $first = false;
+        $query = $query . ' WHERE ';
+      }
+      else {
+        $query = $query . ' AND ';
+      }
+
+      $query = $query . '`' . $col . '` = ';
+      if (is_float($val) || is_int($val) || is_numeric($val)) {
+        $query = $query . $val;
+      }
+      else if (is_string($val)) {
+        $query = $query . '\'' . $val . '\'';
+      }
+      else if (is_bool($val)) {
+        $query = $query . ($val ? 'TRUE' : 'FALSE');
+      }
+      else if (is_array($val) || is_object($val)) {
+        $query = $query . '\'' . json_encode($val) . '\'';
+      }
+    }
+
+    return $query;
   }
 }
 ?>

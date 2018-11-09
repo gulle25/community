@@ -2,17 +2,17 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Main extends My_Controller {
-	function __construct()
+  function __construct()
   {
-      parent::__construct();
+    parent::__construct();
   }
 
-	public function index()
-	{
-
-		$this->_head();
-		$this->load->view('main', $this->view);
-		$this->_footer();
-	}
+  public function introduce()
+  {
+    // 서비스 소개 페이지
+    $this->_set_gnb();
+    $this->_set_sidebar();
+    $this->_load_view('introduce');
+  }
 }
 ?>
