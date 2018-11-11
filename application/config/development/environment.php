@@ -11,8 +11,10 @@ $config['maintenance'] = (object) [
 
 // Cache version
 define('CACHE_KEY_USER', 'user_v2_');
+define('CACHE_KEY_CAFE', 'cafe_v1_');
 
 $config['cache_exp_user'] = 60;
+$config['cache_exp_cafe'] = 60;
 $config['sidebar_max_direct_cafe_link'] = 5;
 
 

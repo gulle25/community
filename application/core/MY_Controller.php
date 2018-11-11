@@ -183,33 +183,34 @@ class My_Controller extends CI_Controller {
   {
     // 로그인 상태 에서의 메뉴
     // 카페 방문 시각 순 정렬
-    $cafe_cnt_total = count($this->user->cafe_info->list);
+    $cafe_cnt_total = 0;
     $cafe_bookmark = [];
     $cafe_normal = [];
-    $groupped = $cafe_cnt_total > $this->config->item('sidebar_max_direct_cafe_link');
-    foreach ($this->user->cafe_info->list as $cafe_idx => $cafe) {
+    foreach ($this->user->cafe_info as $cafeno => $cafe) {
       $idx = 0;
       if ($cafe->bookmark == 1) {
-        foreach ($cafe_bookmark as $cafeno) {
-          if ($cafe->last_visit > $this->user->cafe_info->list[$cafe_bookmark[$idx]]->last_visit) {
+        foreach ($cafe_bookmark as $cafeno2) {
+          if ($cafe->last_visit > $this->user->cafe_info->{$cafeno2}->last_visit) {
             break;
           }
           $idx++;
         }
-        array_splice($cafe_bookmark, $idx, 0, $cafe_idx);
+        array_splice($cafe_bookmark, $idx, 0, $cafeno);
       }
       else {
-        foreach ($cafe_normal as $cafeno) {
-          if ($cafe->last_visit > $this->user->cafe_info->list[$cafe_normal[$idx]]->last_visit) {
+        foreach ($cafe_normal as $cafeno2) {
+          if ($cafe->last_visit > $this->user->cafe_info->{$cafeno2}->last_visit) {
             break;
           }
           $idx++;
         }
-        array_splice($cafe_normal, $idx, 0, $cafe_idx);
+        array_splice($cafe_normal, $idx, 0, $cafeno);
       }
+      $cafe_cnt_total++;
     }
 
     // 즐겨 찾는 카페 목록 구성
+    $groupped = $cafe_cnt_total > $this->config->item('sidebar_max_direct_cafe_link');
     if (count($cafe_bookmark)) {
       if ($groupped)
       {
@@ -218,10 +219,10 @@ class My_Controller extends CI_Controller {
         );
       }
 
-      foreach ($cafe_bookmark as $idx) {
-        $cafe = $this->user->cafe_info->list[$idx];
+      foreach ($cafe_bookmark as $cafeno) {
+        $cafe = $this->user->cafe_info->{$cafeno};
         $this->view->sidebar = array_merge($this->view->sidebar,
-          [ (object) ['type' => $groupped ? 'group_link' : 'text_link', 'value' => $cafe->name, 'class' => '', 'link' => '/index.php/cafe/visit?cafeno=' . $cafe->cafeno, 'feather' => 'book-open']]
+          [ (object) ['type' => $groupped ? 'group_link' : 'text_link', 'value' => $cafe->name, 'class' => '', 'link' => '/index.php/cafe/visit/' . $cafeno, 'feather' => 'book-open']]
         );
       }
     }
@@ -235,10 +236,10 @@ class My_Controller extends CI_Controller {
         );
       }
 
-      foreach ($cafe_normal as $idx) {
-        $cafe = $this->user->cafe_info->list[$idx];
+      foreach ($cafe_normal as $cafeno) {
+        $cafe = $this->user->cafe_info->{$cafeno};
         $this->view->sidebar = array_merge($this->view->sidebar,
-          [ (object) ['type' => $groupped ? 'group_link' : 'text_link', 'value' => $cafe->name, 'class' => '', 'link' => '/index.php/cafe/visit?cafeno=' . $cafe->cafeno, 'feather' => 'book-open']]
+          [ (object) ['type' => $groupped ? 'group_link' : 'text_link', 'value' => $cafe->name, 'class' => '', 'link' => '/index.php/cafe/visit/' . $cafeno, 'feather' => 'book-open']]
         );
       }
     }

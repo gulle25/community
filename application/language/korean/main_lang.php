@@ -50,6 +50,7 @@ $lang['login_success'] = '로그인 되었습니다';
 $lang['query_fail'] = '데이터베이스 오류가 발생 했습니다';
 $lang['email_not_found'] = '가입 되지 않은 이메일 주소 입니다';
 $lang['unknown_user'] = '사용자 정보를 확인할 수 없습니다';
+$lang['unknown_cafe'] = '카페 정보를 확인할 수 없습니다';
 $lang['wrong_password'] = '비밀번호가 올바르지 않습니다';
 $lang['user_already_exist'] = '이미 가입한 사용자 입니다';
 $lang['email_already_exist'] = '이미 가입된 이메일 주소 입니다';
