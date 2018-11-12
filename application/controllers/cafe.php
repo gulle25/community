@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Cafe extends My_Controller {
   protected $available = false;
-  protected $cafeno = 0;
+  protected $cafeid = '';
   protected $cafe;
 
   function __construct()
@@ -30,8 +30,8 @@ class Cafe extends My_Controller {
     // 카페 정보 확인
     $this->load->database();
     $this->load->model('cafe_model');
-    $this->cafeno = $this->router->uri->segments[3];
-    $this->cafe = $this->cafe_model->get($this->cafeno, $this->router->method == 'visit', $this->session->userno);
+    $this->cafeid = $this->router->uri->segments[3];
+    $this->cafe = $this->cafe_model->get($this->cafeid, $this->router->method == 'visit', $this->session->userid);
     if ($this->cafe->errno != My_Model::DB_NO_ERROR)
     {
       $this->_set_flash_message(lang($this->cafe->errno == My_Model::DB_QUERY_FAIL ? 'query_fail' : 'unknown_cafe'));
@@ -42,18 +42,18 @@ class Cafe extends My_Controller {
     $this->available = true;
   }
 
-  public function visit($cafeno)
+  public function visit($cafeid)
   {
     if (!$this->available) return;
 
-    $this->_set_flash_message('cafe ' . $this->cafeno . ' 에 오셨습니다');
+    $this->_set_flash_message('cafe ' . $this->cafe->name . '(' . $this->cafeid . ')에 오셨습니다');
 
     // 사용자 캐시 갱신
-    $cache_key = CACHE_KEY_USER . md5($this->session->userno);
-    $this->user->cafe_info->{$this->cafeno}->last_visit = $this->now;
+    $cache_key = CACHE_KEY_USER . md5($this->session->userid);
+    $this->user->cafe_info->{$this->cafeid}->last_visit = $this->now;
     $this->cache->save($cache_key, $this->user, $this->config->item('cache_exp_user'));
 
-    $this->_redirect('/' . $this->cafe->type  . '/home/' . $this->cafeno);
+    $this->_redirect('/' . $this->cafe->type  . '/home/' . $this->cafeid);
   }
 
   function _set_common_gnb()

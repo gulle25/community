@@ -9,13 +9,13 @@ class User_model extends My_Model {
   }
 
   /*
-    $category : 'email', 'userno', 'name', 'phone'
-    $check_cache : availeble when $category is 'userno'
+    $category : 'email', 'userid', 'name', 'phone'
+    $check_cache : availeble when $category is 'userid'
     $is_login : available when $category is 'email'
    */
   function get($category, $value, $check_cache = true, $is_login = false)
   {
-    if ($check_cache && $category == 'userno')
+    if ($check_cache && $category == 'userid')
     {
       $cache_key = CACHE_KEY_USER . md5($value);
       $cache = $this->cache->get($cache_key);
@@ -41,7 +41,7 @@ class User_model extends My_Model {
     {
       // 캐시에 저장
       // var_dump($cache);
-      $cache_key = CACHE_KEY_USER . md5($user->userno);
+      $cache_key = CACHE_KEY_USER . md5($user->userid);
       $this->cache->save($cache_key, $user, $this->config->item('cache_exp_user'));
     }
 
@@ -50,12 +50,12 @@ class User_model extends My_Model {
 
   function add($info)
   {
-    return parent::call_single_row('CALL add_user(?, ?, ?, ?, ?, ?, ?, ?)', [$info->name, $info->email, $info->pwd_hash, $info->birthday, $info->gender, $info->residence_hash, $info->phone, json_encode($info->info)]);
+    return parent::call_single_row('CALL add_user(?, ?, ?, ?, ?, ?, ?, ?, ?)', [$info->userid, $info->name, $info->email, $info->pwd_hash, $info->birthday, $info->gender, $info->residence_hash, $info->phone, json_encode($info->info)]);
   }
 
-  function update($userno, $data)
+  function update($userid, $data)
   {
-    $query = parent::make_update_query('user_mast', (object) ['userno' => $userno], $data);
+    $query = parent::make_update_query('user_mast', (object) ['userid' => $userid], $data);
     $result = $this->db->query($query);
   }
 }

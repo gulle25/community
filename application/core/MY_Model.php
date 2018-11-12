@@ -18,6 +18,7 @@ class My_Model extends CI_Model {
     $error = $this->db->error();
     if ($error['code'] != 0)
     {
+      $result->free_result();
       return [(object) ['errno' => sprintf('%d', $error['code']), 'error' => $error['message']]];
     }
 

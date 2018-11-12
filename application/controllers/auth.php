@@ -75,7 +75,7 @@ class Auth extends My_Controller {
     // 인증 성공, 세션에 저장
     $this->_set_flash_message(lang('login_success'));
     $this->session->set_userdata('is_logged_in', true);
-    $this->session->set_userdata('userno', $user->userno);
+    $this->session->set_userdata('userid', $user->userid);
     $this->session->set_userdata('email', $this->input->post('email'));
     $this->session->set_userdata('grade', $user->grade);
     // var_dump($user);
@@ -223,6 +223,18 @@ class Auth extends My_Controller {
           return;
         }
 
+        $this->load->database();
+        $this->load->model('user_model');
+
+        // user ID 생성
+        $duplicated = false;
+        do {
+          $sess_signup->userid = $this->_make_random_base36(BASE36_LEN_USERID);
+          $result = $this->user_model->get('userid', $sess_signup->userid, false, false);
+          $duplicated = $result->errno == My_Model::DB_NO_ERROR;
+        }
+        while ($duplicated);
+
         // 계정 생성
         $pwd_hash = md5($this->input->post('password'));
         $sess_signup->name = 'unregistered  ';
@@ -235,8 +247,6 @@ class Auth extends My_Controller {
         $this->session->unset_userdata('signup', false);
         $this->session->set_userdata('is_logged_in', false);
 
-        $this->load->database();
-        $this->load->model('user_model');
         $user = $this->user_model->add($sess_signup);
         if ($user->errno != My_Model::DB_NO_ERROR)
         {

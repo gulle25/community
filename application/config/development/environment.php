@@ -13,6 +13,11 @@ $config['maintenance'] = (object) [
 define('CACHE_KEY_USER', 'user_v2_');
 define('CACHE_KEY_CAFE', 'cafe_v1_');
 
+// Constants
+define('BASE36_LEN_USERID', 6);
+define('BASE36_LEN_CAFEID', 5);
+
+
 $config['cache_exp_user'] = 60;
 $config['cache_exp_cafe'] = 60;
 $config['sidebar_max_direct_cafe_link'] = 5;

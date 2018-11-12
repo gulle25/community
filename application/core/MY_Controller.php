@@ -46,13 +46,13 @@ class My_Controller extends CI_Controller {
   function _is_logged_in()
   {
     // 사용자 세션 확인
-    if (!$this->session->is_logged_in || !$this->session->userno)
+    if (!$this->session->is_logged_in || !$this->session->userid)
     {
       return false;
     }
 
     // 사용자 캐시 확인
-    $cache_key = CACHE_KEY_USER . md5($this->session->userno);
+    $cache_key = CACHE_KEY_USER . md5($this->session->userid);
     $this->user = $this->cache->get($cache_key);
     $this->cafe_type = $this->session->cafe_type;
     if (!$this->user)
@@ -60,7 +60,7 @@ class My_Controller extends CI_Controller {
       // 사용자 캐시가 존재 하지 않으면 DB 에서 정보를 읽는다
       $this->load->database();
       $this->load->model('user_model');
-      $user = $this->user_model->get('userno', $this->session->userno, false, false);
+      $user = $this->user_model->get('userid', $this->session->userid, false, false);
       if ($user->errno == My_Model::DB_QUERY_FAIL)
       {
         // DB 읽기 실패, 세션 로그인 해제
@@ -186,25 +186,25 @@ class My_Controller extends CI_Controller {
     $cafe_cnt_total = 0;
     $cafe_bookmark = [];
     $cafe_normal = [];
-    foreach ($this->user->cafe_info as $cafeno => $cafe) {
+    foreach ($this->user->cafe_info as $cafeid => $cafe) {
       $idx = 0;
       if ($cafe->bookmark == 1) {
-        foreach ($cafe_bookmark as $cafeno2) {
-          if ($cafe->last_visit > $this->user->cafe_info->{$cafeno2}->last_visit) {
+        foreach ($cafe_bookmark as $cafeid2) {
+          if ($cafe->last_visit > $this->user->cafe_info->{$cafeid2}->last_visit) {
             break;
           }
           $idx++;
         }
-        array_splice($cafe_bookmark, $idx, 0, $cafeno);
+        array_splice($cafe_bookmark, $idx, 0, $cafeid);
       }
       else {
-        foreach ($cafe_normal as $cafeno2) {
-          if ($cafe->last_visit > $this->user->cafe_info->{$cafeno2}->last_visit) {
+        foreach ($cafe_normal as $cafeid2) {
+          if ($cafe->last_visit > $this->user->cafe_info->{$cafeid2}->last_visit) {
             break;
           }
           $idx++;
         }
-        array_splice($cafe_normal, $idx, 0, $cafeno);
+        array_splice($cafe_normal, $idx, 0, $cafeid);
       }
       $cafe_cnt_total++;
     }
@@ -219,10 +219,10 @@ class My_Controller extends CI_Controller {
         );
       }
 
-      foreach ($cafe_bookmark as $cafeno) {
-        $cafe = $this->user->cafe_info->{$cafeno};
+      foreach ($cafe_bookmark as $cafeid) {
+        $cafe = $this->user->cafe_info->{$cafeid};
         $this->view->sidebar = array_merge($this->view->sidebar,
-          [ (object) ['type' => $groupped ? 'group_link' : 'text_link', 'value' => $cafe->name, 'class' => '', 'link' => '/index.php/cafe/visit/' . $cafeno, 'feather' => 'book-open']]
+          [ (object) ['type' => $groupped ? 'group_link' : 'text_link', 'value' => $cafe->name, 'class' => '', 'link' => '/index.php/cafe/visit/' . $cafeid, 'feather' => 'book-open']]
         );
       }
     }
@@ -236,14 +236,23 @@ class My_Controller extends CI_Controller {
         );
       }
 
-      foreach ($cafe_normal as $cafeno) {
-        $cafe = $this->user->cafe_info->{$cafeno};
+      foreach ($cafe_normal as $cafeid) {
+        $cafe = $this->user->cafe_info->{$cafeid};
         $this->view->sidebar = array_merge($this->view->sidebar,
-          [ (object) ['type' => $groupped ? 'group_link' : 'text_link', 'value' => $cafe->name, 'class' => '', 'link' => '/index.php/cafe/visit/' . $cafeno, 'feather' => 'book-open']]
+          [ (object) ['type' => $groupped ? 'group_link' : 'text_link', 'value' => $cafe->name, 'class' => '', 'link' => '/index.php/cafe/visit/' . $cafeid, 'feather' => 'book-open']]
         );
       }
     }
   }
 
+  function _make_random_base36($length) {
+    $result = '';
+    for ($i = 0; $i < $length; $i++) {
+      $n = rand(0, 35);
+      $c = chr($n < 10 ? (48 + $n) : (97 + $n - 10));
+      $result = $result . $c;
+    }
+    return $result;
+  }
 }
 ?>
