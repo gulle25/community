@@ -62,6 +62,28 @@ class Cafe extends My_Controller {
 
   function _set_common_sidebar()
   {
+    // var_dump($this->cafe->cafe_info);
+    if (isset($this->cafe->cafe_info->menu)) {
+    foreach ($this->cafe->cafe_info->menu as $menu) {
+      switch ($menu->type) {
+        case 'group':
+          $this->view->sidebar = array_merge($this->view->sidebar,
+            [ (object) ['type' => 'item_group', 'value' => $menu->name, 'class' => '', 'feather' => 'folder', 'groupid' => $menu->groupid, 'expand' => false]]
+          );
+          break;
+        case 'group_end':
+          $this->view->sidebar = array_merge($this->view->sidebar,
+            [ (object) ['type' => 'group_end' ]]
+          );
+          break;
+        case 'board':
+          $this->view->sidebar = array_merge($this->view->sidebar,
+            [ (object) ['type' => $menu->groupid ? 'text_link' : 'group_link', 'value' => $menu->name, 'class' => '', 'feather' => 'book-open', 'groupid' => $menu->groupid, 'link' => '/index.php/cafe/board/' . $menu->boardid]]
+          );
+          break;
+      }
+    }
+  }
   }
 
   function _home()

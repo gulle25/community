@@ -37,8 +37,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <ul id="<?=$item->groupid?>" class="sidebar-dropdown list-unstyled collapse <?=$item->expand ? 'show' : ''?>">
         <?php break; ?>
         <?php case 'group_link': ?>
-            <li class="sidebar-item" id="item_<?=$item_cnt?>">
-              <a class="sidebar-link" href="<?=$item->link?>"><?=$item->value?></a>
+              <li class="sidebar-item" id="item_<?=$item_cnt?>">
+                <a class="sidebar-link" href="<?=$item->link?>"><?=$item->value?></a>
+              </li>
+        <?php break; ?>
+        <?php case 'group_end': ?>
+              </ul>
             </li>
         <?php break; ?>
         <?php endswitch; ?>

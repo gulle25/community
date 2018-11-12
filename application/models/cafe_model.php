@@ -25,8 +25,10 @@ class Cafe_model extends My_Model {
       // JSON -> Objet
       $cafe->cafe_info = json_decode($cafe->cafe_info_json);
       $cafe->role_info = json_decode($cafe->role_info_json);
+      $cafe->board_info = json_decode($cafe->board_info_json);
       unset($cafe->cafe_info_json);
       unset($cafe->role_info_json);
+      unset($cafe->board_info_json);
 
       // 캐시에 저장
       // var_dump($cafe);
