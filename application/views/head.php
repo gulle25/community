@@ -10,5 +10,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <meta name="author" content="Bootlab">
   <title>Community - Responsive Admin Template</title>
   <link href="/application/libraries/appstack/dist/css/app.css" rel="stylesheet">
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 </head>
 <body>

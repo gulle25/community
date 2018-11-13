@@ -42,20 +42,6 @@ class Cafe extends My_Controller {
     $this->available = true;
   }
 
-  public function visit($cafeid)
-  {
-    if (!$this->available) return;
-
-    $this->_set_flash_message('cafe ' . $this->cafe->name . '(' . $this->cafeid . ')에 오셨습니다');
-
-    // 사용자 캐시 갱신
-    $cache_key = CACHE_KEY_USER . md5($this->session->userid);
-    $this->user->cafe_info->{$this->cafeid}->last_visit = $this->now;
-    $this->cache->save($cache_key, $this->user, $this->config->item('cache_exp_user'));
-
-    $this->_redirect('/' . $this->cafe->type  . '/home/' . $this->cafeid);
-  }
-
   function _set_common_gnb()
   {
   }
@@ -78,7 +64,7 @@ class Cafe extends My_Controller {
           break;
         case 'board':
           $this->view->sidebar = array_merge($this->view->sidebar,
-            [ (object) ['type' => $menu->groupid ? 'text_link' : 'group_link', 'value' => $menu->name, 'class' => '', 'feather' => 'book-open', 'groupid' => $menu->groupid, 'link' => '/index.php/cafe/board/' . $menu->boardid]]
+            [ (object) ['type' => $menu->groupid ? 'text_link' : 'group_link', 'value' => $menu->name, 'class' => '', 'feather' => 'book-open', 'groupid' => $menu->groupid, 'link' => '/index.php/' . $this->cafe->type . '/list/' . $this->cafe->cafeid . '/' . $menu->boardid]]
           );
           break;
       }
@@ -86,9 +72,27 @@ class Cafe extends My_Controller {
   }
   }
 
+  public function visit($cafeid)
+  {
+    if (!$this->available) return;
+
+    $this->_set_flash_message('cafe ' . $this->cafe->name . '(' . $this->cafeid . ')에 오셨습니다');
+
+    // 사용자 캐시 갱신
+    $cache_key = CACHE_KEY_USER . md5($this->session->userid);
+    $this->user->cafe_info->{$this->cafeid}->last_visit = $this->now;
+    $this->cache->save($cache_key, $this->user, $this->config->item('cache_exp_user'));
+
+    $this->_redirect('/' . $this->cafe->type  . '/home/' . $this->cafeid);
+  }
+
   function _home()
   {
     // 카페 방문
-}
+  }
+
+  function _list($boardid)
+  {
+  }
 }
 ?>
