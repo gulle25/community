@@ -91,8 +91,24 @@ class Cafe extends My_Controller {
     // 카페 방문
   }
 
-  function _list($boardid)
+  function _list($cafeid, $boardid, $last_ownerid = 10000, $last_sequence = 0)
   {
+    $this->view->list = [];
+    $ono = $last_ownerid;
+    $seq = $last_sequence;
+    $cno = $ono + $seq;
+    $result = [];
+
+    for ($i = 0; $i < 100; $i++) {
+      $cno--;
+      if (++$seq >= 3) {
+        $ono = $cno;
+        $seq = 0;
+      }
+      array_push($result, (object) ['cno' => $cno, 'ono' => $ono, 'seq' => $seq, 'title' => 'tit\'",+=_\\le_' . $cno]);
+    }
+
+    return $result;
   }
 }
 ?>
