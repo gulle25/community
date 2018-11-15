@@ -37,7 +37,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       var dh = $(document).height();
       var wh = $(window).height();
       var wt = $(window).scrollTop();
-      if (dh - 500 < (wh + wt)) {
+      if (dh - <?=SCROLL_BUFFER?> < (wh + wt)) {
         append_list();
       }
 
@@ -62,8 +62,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       sequence = last.attr("seq");
     }
 
-    var url = "/index.php/apart/api_get_list/<?=$info->cafeid?>/<?=$info->boardid?>/" + ownerno + "/" + sequence;
-    alert(url);
+    var url = "/index.php/apart/api_content_list/<?=$info->cafeid?>/<?=$info->boardid?>/" + ownerno + "/" + sequence;
+    // alert(url);
     $.getJSON(url, function(json) {
       $.each(json, function() {
         list.append('<div cno="' + this["cno"] + '" ono="' + this["ono"] + '" seq="' + this["seq"] + '">' + this["title"] + '</div>');

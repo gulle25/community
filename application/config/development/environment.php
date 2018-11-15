@@ -6,7 +6,7 @@ $config['maintenance'] = (object) [
   'enable' => false,
   'comment' => '서비스 점검중 입니다.',
   'begin' => '2018.11.10 00:00:00',
-  'end' => '2018.12.01 00:00:00'
+  'end' => '2019.12.31 00:00:00'
   ];
 
 // Cache version
@@ -17,6 +17,21 @@ define('CACHE_KEY_CAFE', 'cafe_v1_');
 define('BASE36_LEN_USERID', 6);
 define('BASE36_LEN_CAFEID', 5);
 define('BASE36_LEN_BOARDID', 3);
+
+define('SCROLL_BUFFER', 500);
+define('LIST_FETCH_SIZE', 5);
+define('ALL_BOARD', 'total');
+
+define('PERMISSION_ALL', 999);
+define('PERMISSION_MEMBER', 998);
+
+define('ROLE_CAFE_ADMIN', 201);
+define('ROLE_CAFE_FIXED', 301);
+define('ROLE_CAFE_CUSTOM', 401);
+
+define('MAX_CONTENTNO', 99999999);
+define('MAX_COMMENT', 100000);
+
 
 
 $config['cache_exp_user'] = 60;

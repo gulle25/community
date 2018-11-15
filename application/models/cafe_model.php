@@ -31,7 +31,6 @@ class Cafe_model extends My_Model {
       unset($cafe->board_info_json);
 
       // 캐시에 저장
-      // var_dump($cafe);
       $cache_key = CACHE_KEY_CAFE . md5($cafeid);
       $this->cache->save($cache_key, $cafe, $this->config->item('cache_exp_cafe'));
     }
@@ -49,5 +48,18 @@ class Cafe_model extends My_Model {
     $query = parent::make_update_query('user_mast', (object) ['userid' => $userid], $data);
     $result = $this->db->query($query);
   }
+
+  function board_list($cafeid, $board, $last_ownerid, $last_sequence, $size)
+  {
+    // DB 에서 게시물 리스트 읽기
+    $list = parent::call_multi_row('CALL get_content_list(?, ?, ?, ?, ?, ?, ?, ?)', [$cafeid, $board, $this->user->userid, $size, $srch_type, $srch_str, $last_ownerid, $last_sequence]);
+    if ($list->errno != parent::DB_NO_ERROR)
+    {
+      return $list;
+    }
+
+    return $list;
+  }
+
 }
 ?>
