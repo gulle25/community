@@ -196,13 +196,18 @@ class Cafe extends My_Controller {
       }
     }
 
-    $this->load->database();
-    $this->load->model('cafe_model');
+    if ($result_count < LIST_FETCH_SIZE) {
+      $this->load->database();
+      $this->load->model('cafe_model');
+      $sql = 'SELECT boardid, globalno, contentno, ownerno, sequence, userid, nickname, title, deleted, reg_time, edit_time, view_cnt, comment_cnt, info, target_nickname FROM content WHERE cafeid = ? AND (99999999 - ownerno) * 100000 + sequence > ((99999999 - ?) * 100000) + ? ORDER BY ownerno DESC, sequence LIMIT ?';
 
-    $this->cafe = $this->cafe_model->board_list($cafeid, $boardid, $last_ownerid, $last_sequence, LIST_FETCH_SIZE);
-    if ($this->cafe->errno != My_Model::DB_NO_ERROR)
-    {
-      return null;
+      // $list = $this->cafe_model->board_list($cafeid, ALL_BOARD, $last_ownerid, $last_sequence, 5, 'none', '');
+      $list = $this->cafe_model->call_multi_row($sql, [$this->cafeid, $last_ownerid, $last_sequence, LIST_FETCH_SIZE - $result_count]);
+      echo json_encode($list);
+      // if ($list[0]->errno != My_Model::DB_NO_ERROR)
+      // {
+      //   return null;
+      // }
     }
 
     // $this->view->list = [];

@@ -13,8 +13,6 @@ class My_Model extends CI_Model {
   public function call_multi_row($query, $param)
   {
     $result = $this->db->query($query, $param);
-    mysqli_next_result($this->db->conn_id);
-
     $error = $this->db->error();
     if ($error['code'] != 0)
     {
@@ -23,9 +21,10 @@ class My_Model extends CI_Model {
     }
 
     $rows = $result->result();
+    mysqli_more_results($this->db->conn_id);
     $result->free_result();
 
-    return $rows ? $rows : [(object) ['errno' => DB_QUERY_FAIL]];
+    return $rows;
   }
 
   public function call_single_row($query, $param)

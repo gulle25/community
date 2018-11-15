@@ -49,11 +49,11 @@ class Cafe_model extends My_Model {
     $result = $this->db->query($query);
   }
 
-  function board_list($cafeid, $board, $last_ownerid, $last_sequence, $size)
+  function board_list($cafeid, $boardid, $last_ownerid, $last_sequence, $size, $srch_type, $srch_str)
   {
     // DB 에서 게시물 리스트 읽기
-    $list = parent::call_multi_row('CALL get_content_list(?, ?, ?, ?, ?, ?, ?, ?)', [$cafeid, $board, $this->user->userid, $size, $srch_type, $srch_str, $last_ownerid, $last_sequence]);
-    if ($list->errno != parent::DB_NO_ERROR)
+    $list = parent::call_multi_row('CALL get_content_list(?, ?, ?, ?, ?, ?, ?, ?)', [$cafeid, $boardid, 'userid', $size, $srch_type, $srch_str, $last_ownerid, $last_sequence]);
+    if ($list[0]->errno != parent::DB_NO_ERROR)
     {
       return $list;
     }
