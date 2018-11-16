@@ -18,21 +18,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </main>
 
 <script type="text/javascript">
-  var timer;
-  var running = false;
+  var list_fetch_running = false;
+  var all_list_fetched = false;
+  var first_page = true;
 
   $(document).ready(function() {
     append_list();
 
     $(window).scroll(function() {
-      // if (timer) {
-      //   clearTimeout(timer);
-      // }
-
-      if (running) {
-        return;
-      }
-      running = true;
+      if (list_fetch_running || all_list_fetched) return;
 
       var dh = $(document).height();
       var wh = $(window).height();
@@ -40,34 +34,36 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       if (dh - <?=SCROLL_BUFFER?> < (wh + wt)) {
         append_list();
       }
-
-      // timer = setTimeout(function() { }, 1);
-
-      running = false;
     })
   });
 
-  var first_page = true;
-
   function append_list() {
-    var ownerno = 99999999;
-    var sequence = 0;
+    list_fetch_running = true;
+
     var list = $("#scroll");
     var last = list.children().last();
+    var last_ownerno = 99999999;
+    var last_sequence = 0;
 
     if (first_page) {
       first_page = false;
     } else {
-      ownerno = last.attr("ono");
-      sequence = last.attr("seq");
+      last_ownerno = last.attr("ono");
+      last_sequence = last.attr("seq");
     }
 
-    var url = "/index.php/apart/api_content_list/<?=$info->cafeid?>/<?=$info->boardid?>/" + ownerno + "/" + sequence;
+    var url = "/index.php/apart/api_content_list/<?=$info->cafeid?>/<?=$info->boardid?>/" + last_ownerno + "/" + last_sequence + "/none/_";
     // alert(url);
     $.getJSON(url, function(json) {
       $.each(json, function() {
-        list.append('<div cno="' + this["cno"] + '" ono="' + this["ono"] + '" seq="' + this["seq"] + '">' + this["title"] + '</div>');
+        if (this[1] > 0) {
+          list.append('<div cno="' + this[1] + '" ono="' + this[2] + '" seq="' + this[3] + '">' + this[0] + '.' + this[1] + '.' + this[6] + '</div>');
+        } else {
+          list.children().last().attr('last', 1);
+          all_list_fetched = true;
+        }
       });
+      list_fetch_running = false;
     });
   }
 </script>

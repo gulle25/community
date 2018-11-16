@@ -8,12 +8,9 @@ class Cafe_model extends My_Model {
       parent::__construct();
   }
 
-  function get($cafeid, $visit = false, $userid = '')
+  function get($cafeid, $visit, $userid, $cafe_cache)
   {
-    $cache_key = CACHE_KEY_CAFE . md5($cafeid);
-    $cafe = $visit ? null : $this->cache->get($cache_key);
-
-    if ($visit || !$cafe)
+    if ($visit || !$cafe_cache)
     {
       // DB 에서 카페 정보를 읽는다
       $cafe = parent::call_single_row('CALL get_cafe_info(?, ?, ?)', [$cafeid, $visit, $userid]);
@@ -22,17 +19,19 @@ class Cafe_model extends My_Model {
         return $cafe;
       }
 
-      // JSON -> Objet
-      $cafe->cafe_info = json_decode($cafe->cafe_info_json);
-      $cafe->role_info = json_decode($cafe->role_info_json);
-      $cafe->board_info = json_decode($cafe->board_info_json);
-      unset($cafe->cafe_info_json);
-      unset($cafe->role_info_json);
-      unset($cafe->board_info_json);
+      if (!$cafe_cache) {
+        // JSON -> Objet
+        $cafe->cafe_info = json_decode($cafe->cafe_info_json);
+        $cafe->role_info = json_decode($cafe->role_info_json);
+        $cafe->board_info = json_decode($cafe->board_info_json);
+        unset($cafe->cafe_info_json);
+        unset($cafe->role_info_json);
+        unset($cafe->board_info_json);
 
-      // 캐시에 저장
-      $cache_key = CACHE_KEY_CAFE . md5($cafeid);
-      $this->cache->save($cache_key, $cafe, $this->config->item('cache_exp_cafe'));
+        // 캐시에 저장
+        $cache_key = CACHE_KEY_CAFE . md5($cafeid);
+        $this->cache->save($cache_key, $cafe, $this->config->item('cache_exp_cafe'));
+      }
     }
 
     return $cafe;

@@ -27,16 +27,22 @@ class Cafe extends My_Controller {
       return;
     }
 
-    // 카페 정보 확인
-    $this->load->database();
-    $this->load->model('cafe_model');
+    // 카페 캐시 읽기
     $this->cafeid = $this->router->uri->segments[3];
-    $this->cafe = $this->cafe_model->get($this->cafeid, $this->router->method == 'visit', $this->session->userid);
-    if ($this->cafe->errno != My_Model::DB_NO_ERROR)
-    {
-      $this->_set_flash_message(lang($this->cafe->errno == My_Model::DB_QUERY_FAIL ? 'query_fail' : 'unknown_cafe'));
-      $this->_redirect('/');
-      return;
+    $cache_key = CACHE_KEY_CAFE . md5($this->cafeid);
+    $this->cafe = $this->cache->get($cache_key);
+
+    if (!$this->cafe || $this->router->method == 'visit') {
+      // 카페 정보 확인
+      $this->load->database();
+      $this->load->model('cafe_model');
+      $this->cafe = $this->cafe_model->get($this->cafeid, $this->router->method == 'visit', $this->session->userid, $this->cafe);
+      if ($this->cafe->errno != My_Model::DB_NO_ERROR)
+      {
+        $this->_set_flash_message(lang($this->cafe->errno == My_Model::DB_QUERY_FAIL ? 'query_fail' : 'unknown_cafe'));
+        $this->_redirect('/');
+        return;
+      }
     }
 
     $this->available = true;
@@ -76,6 +82,17 @@ class Cafe extends My_Controller {
     }
 
     return false;
+  }
+
+  function _get_content_permission($action)
+  {
+    $permission = [];
+    foreach ($this->cafe->board_info as $boardid => $info) {
+      if ($this->_has_permission($boardid, $action)) {
+        array_push($permission, $boardid);
+      }
+    }
+    return $permission;
   }
 
   function _set_common_gnb()
@@ -131,24 +148,33 @@ class Cafe extends My_Controller {
     // 카페 방문
   }
 
-  function _api_content_list($cafeid, $boardid, $last_ownerid = MAX_CONTENTNO, $last_sequence = 0)
+  function _api_content_list($cafeid, $boardid, $last_ownerid, $last_sequence, $srch_type, $srch_str)
   {
     $result_count = 0;
     $result = [];
-    $board_permission = [];
-    $global_seq = $last_ownerid * MAX_COMMENT + $last_sequence;
-    $list_index = 0;
-    $end_of_list = false;
+    $end_of_list = ['', 0, 0, 0];
+    $global_seq = (MAX_CONTENTNO - $last_ownerid) * MAX_COMMENT + $last_sequence;
+    $board_list = [];
+    $boardid == ALL_BOARD ? $this->_get_content_permission(ACTION_LIST) : $boardid;
+
+    if ($boardid == ALL_BOARD) {
+      $board_list = $this->_get_content_permission(ACTION_LIST);
+      if (!count($board_list)) {
+        // 목록 읽기 가능한 게시판이 없는 경우
+        array_push($result, $end_of_list);
+        return $result;
+      }
+    }
 
     // 캐시 확인
     if (!array_key_exists('list_mast', $this->cafe)) {
       // content list 캐시 생성
       $this->cafe->list_mast = (object) [];
-      $this->cafe->board_seq = (object) [];
+      $this->cafe->content_list = (object) [];
+      $this->cafe->content_list->{ALL_BOARD} = [];
 
-      $this->cafe->board_seq->{ALL_BOARD} = [];
       foreach ($this->cafe->board_info as $bid => $info) {
-        $this->cafe->board_seq->{$bid} = [];
+        $this->cafe->content_list->{$bid} = [];
       }
 
       // 캐시 갱신
@@ -156,75 +182,96 @@ class Cafe extends My_Controller {
       $this->cache->save($cache_key, $this->cafe, $this->config->item('cache_exp_cafe'));
 
       if ($last_ownerid != MAX_CONTENTNO || $last_sequence = 0) {
-        // 처음 목록을 요청한 상태가 아닌 경우 무응답
-        return null;
+        // 처음 목록을 요청한 상태가 아닌 경우
+        array_push($result, $end_of_list);
+        return $result;
       }
     }
 
     // 리스트 캐시에서 읽기
-    foreach ($this->cafe->board_seq->{$boardid} as $gseq) {
-      $list_index++;
-
-      if ($gseq == 0) {
+    foreach ($this->cafe->content_list->{$boardid} as $gseq) {
+      if ($gseq == MAX_CONTENTNO * MAX_COMMENT + MAX_COMMENT - 1) {
         // 게시물 전체 검색 완료
-        $end_of_list = true;
-        break;
+        array_push($result, $end_of_list);
+        return $result;
       }
 
       if ($gseq > $global_seq) {
         $content = $this->cafe->list_mast->{$gseq};
         if ($boardid == ALL_BOARD) {
-          $bid = $content->boardid;
-          if (!in_array($bid, $board_permission)) {
-            // 게시판 목록 접근 권한 검사
-            if ($this->_has_permission($bid, 'list')) {
-              array_push($board_permission, $bid);
-            } else {
-              // 목록 접근 권한이 없음
-              continue;
-            }
+          if (!in_array($content->bid, $board_list)) {
+            // 목록 접근 권한이 없음
+            continue;
           }
         }
 
         // 리스트에 포함 할 게시물 찾음
-        array_push($result, $content);
+        // $content->title = $content->title . '_cache_' . $content->cno;
+        array_push($result, [$content->bid, $content->cno, $content->ono, $content->seq, $content->nick, $content->tgt_nick, $content->title, $content->del, $content->edit, $content->view, $content->cmt, $content->info]);
         $global_seq = $gseq;
         if (++$result_count >= LIST_FETCH_SIZE) {
-          // 리스트를 채웠으므로 return
+          // 리스트를 모두 채웠으므로 return
           return $result;
         }
       }
     }
 
-    if ($result_count < LIST_FETCH_SIZE) {
-      $this->load->database();
-      $this->load->model('cafe_model');
-      $sql = 'SELECT boardid, globalno, contentno, ownerno, sequence, userid, nickname, title, deleted, reg_time, edit_time, view_cnt, comment_cnt, info, target_nickname FROM content WHERE cafeid = ? AND (99999999 - ownerno) * 100000 + sequence > ((99999999 - ?) * 100000) + ? ORDER BY ownerno DESC, sequence LIMIT ?';
+    // DB 에서 리스트 가져 오기
+    $this->load->database();
+    $this->load->model('cafe_model');
+    $cache_key = CACHE_KEY_CAFE . md5($this->cafeid);
+    $board_sql = $boardid == ALL_BOARD ? '' : 'AND boardid = ?';
+    $db_fetch = false;
 
-      // $list = $this->cafe_model->board_list($cafeid, ALL_BOARD, $last_ownerid, $last_sequence, 5, 'none', '');
-      $list = $this->cafe_model->call_multi_row($sql, [$this->cafeid, $last_ownerid, $last_sequence, LIST_FETCH_SIZE - $result_count]);
-      echo json_encode($list);
-      // if ($list[0]->errno != My_Model::DB_NO_ERROR)
-      // {
-      //   return null;
-      // }
+    while ($result_count < LIST_FETCH_SIZE) {
+      $sql = "SELECT boardid bid, globalno gno, contentno cno, ownerno ono, sequence seq, userid uid, nickname nick, title, deleted del, reg_time reg, edit_time edit, view_cnt view, comment_cnt cmt, info, target_nickname tgt_nick FROM content WHERE cafeid = ? $board_sql AND (" . MAX_CONTENTNO . " - ownerno) * " . MAX_COMMENT. " + sequence > ? ORDER BY ownerno DESC, sequence LIMIT ?";
+
+      if ($boardid == ALL_BOARD) {
+        $list = $this->cafe_model->call_multi_row($sql, [$this->cafeid, $global_seq, LIST_FETCH_SIZE]);
+      } else {
+        $list = $this->cafe_model->call_multi_row($sql, [$this->cafeid, $boardid, $global_seq, LIST_FETCH_SIZE]);
+      }
+
+      if (count($list)) {
+        $db_fetch = true;
+        foreach ($list as $info) {
+          $global_seq = (MAX_CONTENTNO - $info->ono) * MAX_COMMENT + $info->seq;
+          if (!in_array($global_seq, $this->cafe->content_list->{$boardid})) {
+            // 캐시에 global sequence 및 리스트 정보 추가
+            array_push($this->cafe->content_list->{$boardid}, $global_seq);
+            if (!array_key_exists($global_seq, $this->cafe->list_mast)) {
+              $this->cafe->list_mast->{$global_seq} = $info;
+            }
+
+            if ($boardid == ALL_BOARD) {
+              if (!in_array($info->bid, $board_list)) {
+                // 목록 접근 권한이 없음
+                continue;
+              }
+            }
+
+            array_push($result, [$info->bid, $info->cno, $info->ono, $info->seq, $info->nick, $info->tgt_nick, $info->title, $info->del, $info->edit, $info->view, $info->cmt, $info->info]);
+            $result_count++;
+          }
+        }
+
+        if (count($list) < LIST_FETCH_SIZE) {
+          // 리스트를 모두 읽음
+          array_push($this->cafe->content_list->{$boardid}, MAX_CONTENTNO * MAX_COMMENT + MAX_COMMENT - 1);
+          array_push($result, $end_of_list);
+          break;
+        }
+      } else {
+        // 더 이상 목록이 없음
+        array_push($this->cafe->content_list->{$boardid}, MAX_CONTENTNO * MAX_COMMENT + MAX_COMMENT - 1);
+        array_push($result, $end_of_list);
+        break;
+      }
     }
 
-    // $this->view->list = [];
-    // $ono = $last_ownerid;
-    // $seq = $last_sequence;
-    // $cno = $ono + $seq;
-    // $result = [];
-
-    // for ($i = 0; $i < 100; $i++) {
-    //   $cno--;
-    //   if (++$seq >= 3) {
-    //     $ono = $cno;
-    //     $seq = 0;
-    //   }
-    //   array_push($result, (object) ['cno' => $cno, 'ono' => $ono, 'seq' => $seq, 'title' => 'tit\'",+=_\\le_' . $cno]);
-    // }
-
+    if ($db_fetch) {
+      $this->cache->save($cache_key, $this->cafe, $this->config->item('cache_exp_cafe'));
+    }
     return $result;
   }
 }
