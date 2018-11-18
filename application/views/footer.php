@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
+<li>
         <footer class="footer">
           <div class="container-fluid">
             <div class="row text-muted">
@@ -27,7 +28,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               </div>
             </div>
           </div>
-        </footer>
+        </footer></li></ul>
       </div>
     </div>
   </div>

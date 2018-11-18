@@ -29,7 +29,11 @@ define('ACTION_COMMENT', 'comment');
 define('PERMISSION_ALL', 999);
 define('PERMISSION_MEMBER', 998);
 
+define('GRADE_ADMIN', 'admin');
+define('GRADE_OPERATOR', 'operator');
+
 define('ROLE_CAFE_ADMIN', 201);
+define('ROLE_CAFE_OPERATOR', 202);
 define('ROLE_CAFE_FIXED', 301);
 define('ROLE_CAFE_CUSTOM', 401);
 

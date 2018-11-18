@@ -243,6 +243,30 @@ class My_Controller extends CI_Controller {
         );
       }
     }
+
+    // 내 정보 메뉴
+    $this->view->sidebar = array_merge($this->view->sidebar,
+      [ (object) ['type' => 'item_group', 'value' => '내 정보', 'class' => '', 'feather' => 'folder', 'groupid' => 'my_info', 'expand' => false],
+        (object) ['type' => 'group_link', 'value' => '실명 인증', 'class' => '', 'feather' => 'book-open', 'groupid' => 'my_info', 'link' => "index.php/myinfo/auth_name"],
+        (object) ['type' => 'group_link', 'value' => '주소 인증', 'class' => '', 'feather' => 'book-open', 'groupid' => 'my_info', 'link' => "index.php/myinfo/auth_addr"],
+        (object) ['type' => 'group_link', 'value' => '휴대폰 인증', 'class' => '', 'feather' => 'book-open', 'groupid' => 'my_info', 'link' => "index.php/myinfo/auth_phone"],
+        (object) ['type' => 'group_end' ]
+    ]);
+
+    // 서비스 관리 메뉴
+    if ($this->user->grade == GRADE_ADMIN || $this->user->grade == GRADE_OPERATOR) {
+      $this->view->sidebar = array_merge($this->view->sidebar,
+        [ (object) ['type' => 'item_group', 'value' => '서비스 관리', 'class' => '', 'feather' => 'folder', 'groupid' => 'admin_svc', 'expand' => false],
+          (object) ['type' => 'group_link', 'value' => '카페 관리', 'class' => '', 'feather' => 'book-open', 'groupid' => 'admin_svc', 'link' => "index.php/setting/cafe"],
+          (object) ['type' => 'group_link', 'value' => '회원 관리', 'class' => '', 'feather' => 'book-open', 'groupid' => 'admin_svc', 'link' => "index.php/setting/user"],
+          (object) ['type' => 'group_end' ]
+      ]);
+    }
+
+    // 로그아웃
+    $this->view->sidebar = array_merge($this->view->sidebar,
+      [ (object) ['type' => 'text_link', 'value' => '로그아웃', 'class' => '', 'link' => "/index.php/auth/logout", 'feather' => 'book-open']]
+    );
   }
 
   function _make_random_base36($length) {

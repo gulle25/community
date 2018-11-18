@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 
-        <main>
+        <main class="my_main">
           <!-- Flash Message -->
     <?php if ($this->session->flashdata('message')): ?>
           <div class="alert alert-primary" role="alert">
@@ -15,7 +15,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
           <div class="card-body p-0" id="scroll">
           </div>
-        </main>
+        </main></li>
+
+<li>
+        <div class="my_bottom bg-white">
+          Bottom
+        </div>
+</li>
 
 <script type="text/javascript">
   var list_fetch_running = false;
@@ -57,7 +63,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     $.getJSON(url, function(json) {
       $.each(json, function() {
         if (this[1] > 0) {
-          list.append('<div cno="' + this[1] + '" ono="' + this[2] + '" seq="' + this[3] + '">' + this[0] + '.' + this[1] + '.' + this[6] + '</div>');
+          list.append('<div cno="' + this[1] + '" ono="' + this[2] + '" seq="' + this[3] + '"><a href="#">' + this[0] + '.' + this[1] + '.' + this[6] + '</a></div>');
         } else {
           list.children().last().attr('last', 1);
           all_list_fetched = true;

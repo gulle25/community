@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="kr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>부트스트랩 101 템플릿</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <!-- IE8 에서 HTML5 요소와 미디어 쿼리를 위한 HTML5 shim 와 Respond.js -->
+    <!-- WARNING: Respond.js 는 당신이 file:// 을 통해 페이지를 볼 때는 동작하지 않습니다. -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
+
+    <style>
+      div {
+        display: block;
+      }
+      .d-flex {
+        display:flex!important;
+      }
+      .sidebar {
+      /*  left:0;
+        top:0;
+        bottom:0;
+    */    width:180px;
+        background-color: blue;
+        /*display:none;*/
+        /*position:fixed;*/
+        z-index:100;
+      }
+      .gnb {
+        top:0;
+        width:100%;
+        position:fixed;
+        background-color: red;
+      }
+      .bottom {
+        bottom:0;
+        width:100%;
+        position:fixed;
+        background-color: red;
+      }
+      .content {
+        margin-top:20px;
+        margin-bottom:20px;
+      }
+    </style>
+  <div class="wrapper">
+    <div class="d-flex">
+
+<!--     <div class="container-fluid">
+      <div class="row">
+ -->        <div class="col-sm-3 sidebar">
+
+
+      <nav class="sidebar sidebar-sticky">
+        <div class="sidebar-content">
+          <a class="sidebar-brand" href="/">
+            <i class="align-middle" data-feather="home"></i>
+            <span class="align-middle">Home</span>
+          </a>
+          <ul class="sidebar-nav">
+                                            <li class="sidebar-item" id="item_1">
+              <a href="/index.php/cafe/visit/ab93f" class="sidebar-link">
+                <i class="align-middle " data-feather="book-open"></i> <span class="align-middle">test1</span>
+              </a>
+            </li>
+                                            <li class="sidebar-item" id="item_2">
+              <a href="/index.php/cafe/visit/lje9f" class="sidebar-link">
+                <i class="align-middle " data-feather="book-open"></i> <span class="align-middle">test2</span>
+              </a>
+            </li>
+                                            <li class="sidebar-item" id="item_3">
+              <a href="#my_info" data-toggle="collapse" class="sidebar-link collapsed" aria-expanded="false">
+                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">내 정보</span>
+              </a>
+              <ul id="my_info" class="sidebar-dropdown list-unstyled collapse ">
+                                              <li class="sidebar-item" id="item_4">
+                <a class="sidebar-link" href="index.php/myinfo/auth_name">실명 인증</a>
+              </li>
+                                              <li class="sidebar-item" id="item_5">
+                <a class="sidebar-link" href="index.php/myinfo/auth_addr">주소 인증</a>
+              </li>
+                                              <li class="sidebar-item" id="item_6">
+                <a class="sidebar-link" href="index.php/myinfo/auth_phone">휴대폰 인증</a>
+              </li>
+                                              </ul>
+            </li>
+                                            <li class="sidebar-item" id="item_8">
+              <a href="/index.php/auth/logout" class="sidebar-link">
+                <i class="align-middle " data-feather="book-open"></i> <span class="align-middle">로그아웃</span>
+              </a>
+            </li>
+                          </ul>
+        </div>
+      </nav>
+
+
+
+
+        </div>
+        <div class="col-sm-9 content">
+          <div class="gnb">
+            GNB
+          </div>
+          <div class="content">
+            Content1<br>
+            Content2<br>
+            Content3<br>
+            Content4<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content<br>
+            Content4<br>
+            Content3<br>
+            Content2<br>
+            Content1<br>
+          </div>
+          <div class="bottom"">
+            Bottom
+          </div>
+        </div>
+          </div>
+        </div>
+<!--       </div>
+    </div>
+ -->  </body>
+</html>

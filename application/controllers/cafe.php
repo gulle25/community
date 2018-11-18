@@ -101,29 +101,63 @@ class Cafe extends My_Controller {
 
   function _set_common_sidebar()
   {
+    // 카페 홈
+    $this->view->sidebar = array_merge($this->view->sidebar,
+      [ (object) ['type' => 'text_link', 'value' => '카페 홈', 'class' => '', 'link' => "/index.php/" . $this->cafe->type . "/home/$this->cafeid", 'feather' => 'book-open']]
+    );
+
+    // 게시판 메뉴
     if (isset($this->cafe->cafe_info->menu)) {
-    foreach ($this->cafe->cafe_info->menu as $menu) {
-      switch ($menu->type) {
-        case 'group':
-          $this->view->sidebar = array_merge($this->view->sidebar,
-            [ (object) ['type' => 'item_group', 'value' => $menu->name, 'class' => '', 'feather' => 'folder', 'groupid' => $menu->groupid, 'expand' => false]]
-          );
-          break;
-        case 'group_end':
-          $this->view->sidebar = array_merge($this->view->sidebar,
-            [ (object) ['type' => 'group_end' ]]
-          );
-          break;
-        case 'board':
-          if ($this->_has_permission($menu->boardid, 'list')) {
+      foreach ($this->cafe->cafe_info->menu as $menu) {
+        switch ($menu->type) {
+          case 'group':
             $this->view->sidebar = array_merge($this->view->sidebar,
-              [ (object) ['type' => $menu->groupid ? 'text_link' : 'group_link', 'value' => $menu->name, 'class' => '', 'feather' => 'book-open', 'groupid' => $menu->groupid, 'link' => '/index.php/' . $this->cafe->type . '/list/' . $this->cafe->cafeid . '/' . $menu->boardid]]
+              [ (object) ['type' => 'item_group', 'value' => $menu->name, 'class' => '', 'feather' => 'folder', 'groupid' => $menu->groupid, 'expand' => false]]
             );
-          }
-          break;
+            break;
+          case 'group_end':
+            $this->view->sidebar = array_merge($this->view->sidebar,
+              [ (object) ['type' => 'group_end' ]]
+            );
+            break;
+          case 'board':
+            if ($this->_has_permission($menu->boardid, 'list')) {
+              $this->view->sidebar = array_merge($this->view->sidebar,
+                [ (object) ['type' => $menu->groupid ? 'text_link' : 'group_link', 'value' => $menu->name, 'class' => '', 'feather' => 'book-open', 'groupid' => $menu->groupid, 'link' => '/index.php/' . $this->cafe->type . '/list/' . $this->cafe->cafeid . '/' . $menu->boardid]]
+              );
+            }
+            break;
+        }
       }
     }
-  }
+
+    // 내 정보 메뉴
+    $this->view->sidebar = array_merge($this->view->sidebar,
+      [ (object) ['type' => 'item_group', 'value' => '내 정보', 'class' => '', 'feather' => 'folder', 'groupid' => 'my_info', 'expand' => false],
+        (object) ['type' => 'group_link', 'value' => '정보 조회', 'class' => '', 'feather' => 'book-open', 'groupid' => 'my_info', 'link' => "index.php/myinfo/cafe_info"],
+        (object) ['type' => 'group_link', 'value' => '실명 인증', 'class' => '', 'feather' => 'book-open', 'groupid' => 'my_info', 'link' => "index.php/myinfo/auth_name"],
+        (object) ['type' => 'group_link', 'value' => '주소 인증', 'class' => '', 'feather' => 'book-open', 'groupid' => 'my_info', 'link' => "index.php/myinfo/auth_addr"],
+        (object) ['type' => 'group_link', 'value' => '휴대폰 인증', 'class' => '', 'feather' => 'book-open', 'groupid' => 'my_info', 'link' => "index.php/myinfo/auth_phone"],
+        (object) ['type' => 'group_end' ]
+    ]);
+
+    // 카페 관리 메뉴
+    if (array_key_exists($this->cafeid, $this->user->cafe_info)) {
+      if (in_array(ROLE_CAFE_ADMIN, $this->user->cafe_info->{$this->cafeid}->role) ||
+        in_array(ROLE_CAFE_OPERATOR, $this->user->cafe_info->{$this->cafeid}->role)) {
+        $this->view->sidebar = array_merge($this->view->sidebar,
+          [ (object) ['type' => 'item_group', 'value' => '카페 관리', 'class' => '', 'feather' => 'folder', 'groupid' => 'admin_cafe', 'expand' => false],
+            (object) ['type' => 'group_link', 'value' => '게시판 관리', 'class' => '', 'feather' => 'book-open', 'groupid' => 'admin_cafe', 'link' => "index.php/admin/board/$this->cafeid"],
+            (object) ['type' => 'group_link', 'value' => '회원 관리', 'class' => '', 'feather' => 'book-open', 'groupid' => 'admin_cafe', 'link' => "index.php/admin/member/$this->cafeid"],
+            (object) ['type' => 'group_end' ]
+        ]);
+      }
+    }
+
+    // 로그아웃
+    $this->view->sidebar = array_merge($this->view->sidebar,
+      [ (object) ['type' => 'text_link', 'value' => '로그아웃', 'class' => '', 'link' => "/index.php/auth/logout", 'feather' => 'book-open']]
+    );
   }
 
   public function visit($cafeid)

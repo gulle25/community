@@ -2,14 +2,39 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 ?>
-      <div class="main">
 
-  <?php if (ENVIRONMENT == 'development'): ?>
-        <div class="alert alert-primary" role="alert">[Development]</div>
-  <?php elseif (ENVIRONMENT == 'testing'): ?>
-        <div class="alert alert-primary" role="alert">[Testing]</div>
-  <?php endif; ?>
+          <style>
+            .alert {
+              margin-top:40px;
+              /*position:absolute;*/
+            }
+            .my_main {
+              margin-top:40px;
+            }
+            .gnb {
+              top:0;
+              /*right:0;*/
+              /*width:100%;*/
+              position:fixed;
+              height:40px;
+              z-index:10000;
+            }
+            .my_bottom {
+              bottom:0;
+              /*right:0;*/
+              /*width:100%;*/
+              position:fixed;
+              height:40px;
+              z-index:10000;
+            }
+            .footer {
+              margin-bottom: 40px;
+            }
+          </style>
 
+      <ul>
+        <li>
+      <div class="gnb"">
         <nav class="navbar navbar-expand navbar-light bg-white">
           <a class="sidebar-toggle d-flex mr-2">
             <i class="hamburger align-self-center"></i>
@@ -178,6 +203,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </ul>
           </div>
         </nav>
+          </div></li>
+
+      <li>
+      <div class="main">
+  <?php if (ENVIRONMENT == 'development'): ?>
+        <div class="alert alert-primary" role="alert">[Development]</div>
+  <?php elseif (ENVIRONMENT == 'testing'): ?>
+        <div class="alert alert-primary" role="alert">[Testing]</div>
+  <?php endif; ?>
+
 
         <!-- GNB Content -->
 <!--       <?php foreach ($gnb as $item): ?>
