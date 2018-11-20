@@ -1,27 +1,27 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
-
-        <main class="my_main">
-          <!-- Flash Message -->
-    <?php if ($this->session->flashdata('message')): ?>
-          <div class="alert alert-primary" role="alert">
-            <div class="alert-message">
-              <?php echo $this->session->flashdata('message')['message']; ?>
-              <?php $this->session->set_flashdata('message'); ?>
+        <div class="content" >
+          <main class="main">
+            <!-- Flash Message -->
+      <?php if ($this->session->flashdata('message')): ?>
+            <div class="alert alert-primary" role="alert">
+              <div class="alert-message">
+                <?php echo $this->session->flashdata('message')['message']; ?>
+                <?php $this->session->set_flashdata('message'); ?>
+              </div>
             </div>
-          </div>
-    <?php endif; ?>
+      <?php endif; ?>
 
-          <div class="card-body p-0" id="scroll">
-          </div>
-        </main></li>
+            <div class="card-body p-0" id="scroll">
+            </div>
+          </main>
 
-<li>
-        <div class="my_bottom bg-white">
-          Bottom
-        </div>
-</li>
+          <li>
+            <div class="bottom bg-white">
+              Bottom
+            </div>
+          </li>
 
 <script type="text/javascript">
   var list_fetch_running = false;

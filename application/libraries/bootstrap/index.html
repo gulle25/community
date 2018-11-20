@@ -7,8 +7,6 @@
     <title>부트스트랩 101 템플릿</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
     <!-- IE8 에서 HTML5 요소와 미디어 쿼리를 위한 HTML5 shim 와 Respond.js -->
     <!-- WARNING: Respond.js 는 당신이 file:// 을 통해 페이지를 볼 때는 동작하지 않습니다. -->
     <!--[if lt IE 9]>
@@ -18,148 +16,157 @@
   </head>
 
   <body>
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
-
     <style>
-      div {
-        display: block;
+      .my-sidebar-small-show {
+        left: 0;
+        top: 0;
+        bottom: 0;
+        height: 100%;
+        width: 180px;
+        background: #ccc;
+        position: fixed;
+        z-index: 100;
       }
-      .d-flex {
-        display:flex!important;
+      .my-sidebar-small-hide {
+        left: 0;
+        top: 0;
+        bottom: 0;
+        height: 100%;
+        width: 180px;
+        background: #ccc;
+        position: fixed;
+        display: none;
+        z-index: 100;
       }
-      .sidebar {
-      /*  left:0;
-        top:0;
-        bottom:0;
-    */    width:180px;
-        background-color: blue;
-        /*display:none;*/
-        /*position:fixed;*/
-        z-index:100;
+      .my-sidebar-large-show {
+        left: 0;
+        top: 0;
+        bottom: 0;
+        min-height: 100%;
+        width: 180px;
+        background: #ccc;
+        position: absolute;
+        z-index: 100;
+      }
+      .my-sidebar-large-hide {
+        left: 0;
+        top: 0;
+        bottom: 0;
+        min-height: 100%;
+        width: 180px;
+        background: #ccc;
+        position: absolute;
+        z-index: 100;
+        display: none;
+      }
+      .my-content-with-sidebar {
+          margin-left: 180px;
+          background-color: #f1f1f1;
+      }
+      .my-content-without-sidebar {
+          background-color: #f1f1f1;
       }
       .gnb {
         top:0;
-        width:100%;
-        position:fixed;
-        background-color: red;
-      }
-      .bottom {
-        bottom:0;
-        width:100%;
-        position:fixed;
+        position: sticky;
         background-color: red;
       }
       .content {
-        margin-top:20px;
-        margin-bottom:20px;
+        padding-bottom: 1000px;
+      }
+      .bottom {
+        bottom:0;
+        position: sticky;
+        background-color: red;
       }
     </style>
-  <div class="wrapper">
-    <div class="d-flex">
 
-<!--     <div class="container-fluid">
-      <div class="row">
- -->        <div class="col-sm-3 sidebar">
-
-
-      <nav class="sidebar sidebar-sticky">
-        <div class="sidebar-content">
-          <a class="sidebar-brand" href="/">
-            <i class="align-middle" data-feather="home"></i>
-            <span class="align-middle">Home</span>
-          </a>
-          <ul class="sidebar-nav">
-                                            <li class="sidebar-item" id="item_1">
-              <a href="/index.php/cafe/visit/ab93f" class="sidebar-link">
-                <i class="align-middle " data-feather="book-open"></i> <span class="align-middle">test1</span>
-              </a>
-            </li>
-                                            <li class="sidebar-item" id="item_2">
-              <a href="/index.php/cafe/visit/lje9f" class="sidebar-link">
-                <i class="align-middle " data-feather="book-open"></i> <span class="align-middle">test2</span>
-              </a>
-            </li>
-                                            <li class="sidebar-item" id="item_3">
-              <a href="#my_info" data-toggle="collapse" class="sidebar-link collapsed" aria-expanded="false">
-                <i class="align-middle" data-feather="folder"></i> <span class="align-middle">내 정보</span>
-              </a>
-              <ul id="my_info" class="sidebar-dropdown list-unstyled collapse ">
-                                              <li class="sidebar-item" id="item_4">
-                <a class="sidebar-link" href="index.php/myinfo/auth_name">실명 인증</a>
-              </li>
-                                              <li class="sidebar-item" id="item_5">
-                <a class="sidebar-link" href="index.php/myinfo/auth_addr">주소 인증</a>
-              </li>
-                                              <li class="sidebar-item" id="item_6">
-                <a class="sidebar-link" href="index.php/myinfo/auth_phone">휴대폰 인증</a>
-              </li>
-                                              </ul>
-            </li>
-                                            <li class="sidebar-item" id="item_8">
-              <a href="/index.php/auth/logout" class="sidebar-link">
-                <i class="align-middle " data-feather="book-open"></i> <span class="align-middle">로그아웃</span>
-              </a>
-            </li>
-                          </ul>
-        </div>
+    <section>
+      <nav class="my-sidebar-small-hide" id="sidebar">
+        <ul>
+          <li><a href="#">London</a></li>
+          <li><a href="#">Paris</a></li>
+          <li><a href="#">Tokyo</a></li>
+        </ul>
       </nav>
-
-
-
-
+      
+      <article class="my-content-without-sidebar" id="article">
+        <div class="gnb">
+          <p style="text-align: left;">GNB</p>
+          <p style="text-align: right;">GNB</p>
         </div>
-        <div class="col-sm-9 content">
-          <div class="gnb">
-            GNB
-          </div>
-          <div class="content">
-            Content1<br>
-            Content2<br>
-            Content3<br>
-            Content4<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content<br>
-            Content4<br>
-            Content3<br>
-            Content2<br>
-            Content1<br>
-          </div>
-          <div class="bottom"">
-            Bottom
-          </div>
+        <h1>London</h1>
+        <p>London is the capital city of England. It is the most populous city in the  United Kingdom, with a metropolitan area of over 13 million inhabitants.</p>
+        <p>Standing on the River Thames, London has been a major settlement for two millennia, its history going back to its founding by the Romans, who named it Londinium.</p>
+        <div class="content" >
+          Content1<br>
         </div>
-          </div>
+        <div class="bottom">
+          <p style="text-align: left;">Bottom</p>
+          <p style="text-align: right;">Bottom</p>
         </div>
-<!--       </div>
-    </div>
- -->  </body>
+      </article>
+    </section>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+   </body>
+
+<script>
+  var sidebar_mode = 1;
+
+  $(document).ready(function() {
+    console.log("begin");
+    check_sidebar();
+
+    window.addEventListener("resize", function() {
+      check_sidebar();
+    });
+
+    function check_sidebar() {
+      var width = window.innerWidth ;
+      var new_mode;
+
+      if (width < 600) {
+        new_mode = 1;
+      } else {
+        new_mode = 2;
+      }
+
+      set_sidebar(new_mode);
+    }
+
+    function set_sidebar(new_mode) {
+      if (sidebar_mode == new_mode) {
+        return;
+      }
+
+      console.log("Chanfe mode : " + new_mode);
+
+      switch (sidebar_mode) {
+        case 1:
+          $("#sidebar").removeClass("my-sidebar-small-hide");
+          $("#article").removeClass("my-content-without-sidebar");
+          break;
+        case 2:
+          $("#sidebar").removeClass("my-sidebar-large-show");
+          $("#article").removeClass("my-content-with-sidebar");
+          break;
+      }
+
+      sidebar_mode = new_mode;
+
+      switch (sidebar_mode) {
+        case 1:
+          $("#sidebar").addClass("my-sidebar-small-hide");
+          $("#article").addClass("my-content-without-sidebar");
+          break;
+        case 2:
+          $("#sidebar").addClass("my-sidebar-large-show");
+          $("#article").addClass("my-content-with-sidebar");
+          break;
+      }
+    }
+  });
+</script>
 </html>
