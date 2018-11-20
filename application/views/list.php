@@ -59,7 +59,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     }
 
     var url = "/index.php/apart/api_content_list/<?=$info->cafeid?>/<?=$info->boardid?>/" + last_ownerno + "/" + last_sequence + "/none/_";
-    // alert(url);
     $.getJSON(url, function(json) {
       $.each(json, function() {
         if (this[1] > 0) {
