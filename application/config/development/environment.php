@@ -18,6 +18,7 @@ define('BASE36_LEN_USERID', 6);
 define('BASE36_LEN_CAFEID', 5);
 define('BASE36_LEN_BOARDID', 3);
 
+define('SIDEBAR_WIDTH', 220);
 define('SCROLL_BUFFER', 1000);
 define('LIST_FETCH_SIZE', 50);
 define('ALL_BOARD', 'total');

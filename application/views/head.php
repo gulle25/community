@@ -22,7 +22,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       top: 0;
       bottom: 0;
       height: 100%;
-      width: 180px;
+      width: <?=SIDEBAR_WIDTH?>px;
       background: #ccc;
       position: fixed;
       z-index: 100;
@@ -32,18 +32,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       top: 0;
       bottom: 0;
       height: 100%;
-      width: 180px;
+      width: <?=SIDEBAR_WIDTH?>px;
       background: #ccc;
       position: fixed;
-      display: none;
       z-index: 100;
+      display: none;
     }
     .sidebar-large-show {
       left: 0;
       top: 0;
       bottom: 0;
       min-height: 100%;
-      width: 180px;
+      width: <?=SIDEBAR_WIDTH?>px;
       background: #ccc;
       position: absolute;
       z-index: 100;
@@ -53,32 +53,35 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       top: 0;
       bottom: 0;
       min-height: 100%;
-      width: 180px;
+      width: <?=SIDEBAR_WIDTH?>px;
       background: #ccc;
       position: absolute;
       z-index: 100;
       display: none;
     }
     .content-with-sidebar {
-        margin-left: 180px;
-        background-color: #f1f1f1;
+      margin-left: <?=SIDEBAR_WIDTH?>px;
+      background-color: #f1f1f1;
     }
     .content-without-sidebar {
-        background-color: #f1f1f1;
+      background-color: #f1f1f1;
+    }
+    .content-disabled {
+      background-color: #f1f1f1;
+      opacity: 0.5;
     }
     .gnb {
       top:0;
       position: sticky;
       background-color: red;
-      z-index: 100;
     }
     .content {
       padding-bottom: 1000px;
+      overflow: hidden;
     }
     .bottom {
       bottom:0;
       position: sticky;
       background-color: red;
-      z-index: 100;
     }
   </style>

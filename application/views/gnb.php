@@ -3,6 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 ?>
 
+<div>
       <article class="content-without-sidebar" id="article">
         <div class="gnb bg-white" id="gnb">
           <a href="javascript:onToggleMenu()">

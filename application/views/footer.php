@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
+      </article>
       </div>
         <footer class="footer">
           <div class="container-fluid">
@@ -56,11 +57,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     var width = window.innerWidth ;
     var new_mode;
 
-    if (width < 600) {
+    if (width < <?=(SIDEBAR_WIDTH/0.3)?>) {
       new_mode = 1;
     } else {
-      var expand_menu = getCookie("expand_menu");
-      if (expand_menu == "on") {
+      var show_menu = getCookie("show_menu");
+      if (show_menu != "off") {
         new_mode = 3;
       } else {
         new_mode = 4;
@@ -84,7 +85,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         break;
       case 2:
         $("#sidebar").removeClass("sidebar-small-show");
-        $("#article").removeClass("content-without-sidebar");
+        $("#article").removeClass("content-disabled");
         break;
       case 3:
         $("#sidebar").removeClass("sidebar-large-show");
@@ -103,7 +104,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         break;
       case 2:
         $("#sidebar").addClass("sidebar-small-show");
-        $("#article").addClass("content-without-sidebar");
+        $("#article").addClass("content-disabled");
         break;
       case 3:
         $("#sidebar").addClass("sidebar-large-show");
@@ -139,15 +140,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   }
 
   function onToggleMenu() {
-    var expand_menu = getCookie("expand_menu");
-    if (sidebar_mode < 2) {
-      set_sidebar(3 - sidebar_mode);
+    var show_menu = getCookie("show_menu");
+    if (sidebar_mode < 3) {
+      set_sidebar(2);
     } else {
       set_sidebar(7 - sidebar_mode);
-      if (expand_menu == "on") {
-        setoCookie("off");
+      if (show_menu != "off") {
+        setCookie("show_menu", "off", 1);
       } else {
-        setoCookie("on");
+        setCookie("show_menu", "on", 1);
       }
     }
   }

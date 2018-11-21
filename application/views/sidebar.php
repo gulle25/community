@@ -2,6 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
   <section>
+    <div>
     <nav class="sidebar-small-hide" id="sidebar">
       <a class="sidebar-brand" href="/">
         <i class="align-middle" data-feather="home"></i>
@@ -46,3 +47,4 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <?php endforeach; ?>
       </ul>
     </nav>
+  </div>
