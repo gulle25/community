@@ -1,87 +1,37 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?><!DOCTYPE html>
-<html lang="kr">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="Responsive Bootstrap 4 Admin Template">
-  <meta name="author" content="Bootlab">
-  <title>Responsive Admin Template</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-</head>
+<html lang="en">
+<title>W3.CSS Template</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-red.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<style>
+html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
+.w3-sidebar {
+  z-index: 3;
+  width: 250px;
+  top: 43px;
+  bottom: 0;
+  height: inherit;
+}
+</style>
 <body>
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-  <style>
-    .sidebar-small-show {
-      left: 0;
-      top: 0;
-      bottom: 0;
-      height: 100%;
-      width: <?=SIDEBAR_WIDTH?>px;
-      background: #ccc;
-      position: fixed;
-      z-index: 100;
-    }
-    .sidebar-small-hide {
-      left: 0;
-      top: 0;
-      bottom: 0;
-      height: 100%;
-      width: <?=SIDEBAR_WIDTH?>px;
-      background: #ccc;
-      position: fixed;
-      z-index: 100;
-      display: none;
-    }
-    .sidebar-large-show {
-      left: 0;
-      top: 0;
-      bottom: 0;
-      min-height: 100%;
-      width: <?=SIDEBAR_WIDTH?>px;
-      background: #ccc;
-      position: absolute;
-      z-index: 100;
-    }
-    .sidebar-large-hide {
-      left: 0;
-      top: 0;
-      bottom: 0;
-      min-height: 100%;
-      width: <?=SIDEBAR_WIDTH?>px;
-      background: #ccc;
-      position: absolute;
-      z-index: 100;
-      display: none;
-    }
-    .content-with-sidebar {
-      margin-left: <?=SIDEBAR_WIDTH?>px;
-      background-color: #f1f1f1;
-    }
-    .content-without-sidebar {
-      background-color: #f1f1f1;
-    }
-    .content-disabled {
-      background-color: #f1f1f1;
-      opacity: 0.5;
-    }
-    .gnb {
-      top:0;
-      position: sticky;
-      background-color: red;
-    }
-    .content {
-      padding-bottom: 1000px;
-      overflow: hidden;
-    }
-    .bottom {
-      bottom:0;
-      position: sticky;
-      background-color: red;
-    }
-  </style>
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+    <a class="w3-bar-item w3-button w3-left w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+    <a href="#" class="w3-bar-item w3-button w3-theme-l1">Logo</a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">About</a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Values</a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">News</a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Contact</a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white">Clients</a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white">Partners</a>
+  </div>
+</div>

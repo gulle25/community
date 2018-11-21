@@ -1,9 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
-        <div class="content" >
-          <main class="main">
-            <!-- Flash Message -->
       <?php if ($this->session->flashdata('message')): ?>
             <div class="alert alert-primary" role="alert">
               <div class="alert-message">
@@ -15,7 +12,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
             <div class="card-body p-0" id="scroll">
             </div>
-          </main>
 
           <li>
             <div class="bottom bg-white">
