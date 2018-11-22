@@ -103,7 +103,7 @@ class Cafe extends My_Controller {
   {
     // 카페 홈
     $this->view->sidebar = array_merge($this->view->sidebar,
-      [ (object) ['type' => 'text_link', 'value' => '카페 홈', 'class' => '', 'link' => "/index.php/" . $this->cafe->type . "/home/$this->cafeid", 'feather' => 'book-open']]
+      [ (object) ['type' => 'text_link', 'value' => '카페 전체 글', 'class' => '', 'link' => "/index.php/" . $this->cafe->type . "/home/$this->cafeid", 'feather' => 'book-open']]
     );
 
     // 게시판 메뉴

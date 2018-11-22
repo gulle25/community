@@ -7,14 +7,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 .w3-sidebar {
   z-index: 3;
   width: 250px;
-  top: 43px;
+  top: 0;
   bottom: 0;
   height: inherit;
 }
 </style>
 
 <nav class="w3-sidebar w3-bar-block w3-collapse w3-theme-<?=SIDEBAR_THEME?> w3-animate-left" id="mySidebar">
-    <a class="w3-bar-item w3-button w3-hover-black" href="/">Link</a>
+    <a class="w3-bar-item w3-button w3-hover-black" href="/">Home</a>
   <?php $item_cnt = 0; ?>
   <?php foreach ($sidebar as $item): ?>
   <?php $item_cnt++; ?>
@@ -27,7 +27,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <?php break; ?>
   <?php case 'item_group': ?>
       <button class="w3-button w3-block w3-hover-<?=SIDEBAR_HOVER?> w3-left-align" onclick="onClickGroup('<?=$item->groupid?>')"><?=$item->value?><i class="w3-right fa fa-caret-down"></i></button>
-      <div class="w3-hide w3-white w3-card" id="<?=$item->groupid?>">
+      <div class="w3-hide" id="<?=$item->groupid?>">
   <?php break; ?>
   <?php case 'group_link': ?>
         <a class="w3-bar-item w3-button w3-theme-<?=SIDEBAR_THEME?> w3-hover-<?=SIDEBAR_HOVER?>" href="<?=$item->link?>" style="padding-left:30px"><?=$item->value?></a>
@@ -54,14 +54,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <script>
 function onClickGroup(id) {
-    var x = document.getElementById(id);
-    if (x.className.indexOf("w3-show") == -1) {
-        x.className += " w3-show";
-        // x.previousElementSibling.className += " w3-green";
-    } else { 
-        x.className = x.className.replace(" w3-show", "");
-        // x.previousElementSibling.className = 
-        // x.previousElementSibling.className.replace(" w3-green", "");
-    }
+  var div = $("#"+id);
+  div.toggleClass("w3-hide");
+  div.prev().toggleClass("w3-theme-l2");
 }
 </script>
