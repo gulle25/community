@@ -32,6 +32,7 @@ class Apart extends Cafe {
     $this->_set_gnb();
     $this->_set_sidebar();
     $this->_load_view('list');
+    // echo json_encode($this->cafe->cafe_info->menu);
   }
 
   public function list($cafeid, $boardid)

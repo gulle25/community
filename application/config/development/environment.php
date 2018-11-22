@@ -13,6 +13,11 @@ $config['maintenance'] = (object) [
 define('CACHE_KEY_USER', 'user_v2_');
 define('CACHE_KEY_CAFE', 'cafe_v1_');
 
+// Design
+define('DEFAULT_THEME', 'teal');
+define('SIDEBAR_THEME', 'l4');
+define('SIDEBAR_HOVER', 'black');
+
 // Constants
 define('BASE36_LEN_USERID', 6);
 define('BASE36_LEN_CAFEID', 5);

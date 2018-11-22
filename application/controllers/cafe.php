@@ -121,9 +121,9 @@ class Cafe extends My_Controller {
             );
             break;
           case 'board':
-            if ($this->_has_permission($menu->boardid, 'list')) {
+            if ($this->_has_permission($menu->boardid, ACTION_LIST)) {
               $this->view->sidebar = array_merge($this->view->sidebar,
-                [ (object) ['type' => $menu->groupid ? 'text_link' : 'group_link', 'value' => $menu->name, 'class' => '', 'feather' => 'book-open', 'groupid' => $menu->groupid, 'link' => '/index.php/' . $this->cafe->type . '/list/' . $this->cafe->cafeid . '/' . $menu->boardid]]
+                [ (object) ['type' => $menu->groupid == '' ? 'text_link' : 'group_link', 'value' => $menu->name, 'class' => '', 'feather' => 'book-open', 'groupid' => $menu->groupid, 'link' => '/index.php/' . $this->cafe->type . '/list/' . $this->cafe->cafeid . '/' . $menu->boardid]]
               );
             }
             break;

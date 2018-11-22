@@ -20,8 +20,8 @@ class My_Controller extends CI_Controller {
     $this->lang->load('main','korean');
 
     $this->view = (object) [
-      'sidebar' => [],
       'gnb' => [],
+      'sidebar' => [],
       'content' => (object) []
     ];
 
@@ -110,8 +110,8 @@ class My_Controller extends CI_Controller {
   function _load_view($page)
   {
     $this->load->view('head', $this->view);
-    $this->load->view('sidebar', $this->view);
     $this->load->view('gnb', $this->view);
+    $this->load->view('sidebar', $this->view);
     $this->load->view($page, $this->view);
     $this->load->view('footer', $this->view);
   }
