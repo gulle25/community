@@ -233,7 +233,7 @@ class Cafe extends My_Controller {
       if ($gseq > $global_seq) {
         $content = $this->cafe->list_mast->{$gseq};
         if ($boardid == ALL_BOARD) {
-          if (!in_array($content->bid, $board_list)) {
+          if (!in_array($content[0], $board_list)) {
             // 목록 접근 권한이 없음
             continue;
           }
@@ -241,7 +241,8 @@ class Cafe extends My_Controller {
 
         // 리스트에 포함 할 게시물 찾음
         // $content->title = $content->title . '_cache_' . $content->cno;
-        array_push($result, [$content->bid, $content->cno, $content->ono, $content->seq, $content->nick, $content->tgt_nick, $content->title, $content->del, $content->edit, $content->view, $content->cmt, $content->info]);
+        // array_push($result, [$content->bid, $content->cno, $content->ono, $content->seq, $content->nick, $content->tgt_nick, $content->title, $content->del, $content->edit, $content->view, $content->cmt, $content->info]);
+        array_push($result, [$content[0], $content[2], $content[3], $content[4], $content[6], $content[14], $content[7], $content[8], $content[10], $content[11], $content[12]]);
         $global_seq = $gseq;
         if (++$result_count >= LIST_FETCH_SIZE) {
           // 리스트를 모두 채웠으므로 return
@@ -274,17 +275,38 @@ class Cafe extends My_Controller {
             // 캐시에 global sequence 및 리스트 정보 추가
             array_push($this->cafe->content_list->{$boardid}, $global_seq);
             if (!array_key_exists($global_seq, $this->cafe->list_mast)) {
-              $this->cafe->list_mast->{$global_seq} = $info;
+              // $this->cafe->list_mast->{$global_seq} = $info;
+              $data = array_values($info);
+              echo $data;
+              $this->cafe->list_mast->{$global_seq} = $data;
+              // $this->cafe->list_mast->{$global_seq} = [
+              //   $info->bid,       // 0:board id
+              //   $info->gno,       // 1:global no
+              //   $info->cno,       // 2:content no
+              //   $info->ono,       // 3:owner no
+              //   $info->seq,       // 4:sequence
+              //   $info->uid,       // 5:user id
+              //   $info->nick,      // 6:nickname
+              //   $info->title,     // 7:title
+              //   $info->del,       // 8:deleted
+              //   $info->reg,       // 9:registered time
+              //   $info->edit,      // 10:editted time
+              //   $info->view,      // 11:view count
+              //   $info->cmt,       // 12:comment count
+              //   $info->info,      // 13:info (JSON)
+              //   $info->tgt_nick   // 14:target nickname
+              //   ];
             }
 
             if ($boardid == ALL_BOARD) {
-              if (!in_array($info->bid, $board_list)) {
+              if (!in_array($data[0], $board_list)) {
                 // 목록 접근 권한이 없음
                 continue;
               }
             }
 
-            array_push($result, [$info->bid, $info->cno, $info->ono, $info->seq, $info->nick, $info->tgt_nick, $info->title, $info->del, $info->edit, $info->view, $info->cmt, $info->info]);
+            // array_push($result, [$info->bid, $info->cno, $info->ono, $info->seq, $info->nick, $info->tgt_nick, $info->title, $info->del, $info->edit, $info->view, $info->cmt]);
+            array_push($result, [$data[0], $data[2], $data[3], $data[4], $data[6], $data[14], $data[7], $data[8], $data[10], $data[11], $data[12]]);
             $result_count++;
           }
         }
