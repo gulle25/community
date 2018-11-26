@@ -13,8 +13,8 @@ class Cafe extends My_Controller {
     if ($this->maintaining) {
       if (!$this->administrator) {
         $this->_redirect('/');
-        return;
       }
+        return;
     }
 
     if (!$this->_is_logged_in()) {
@@ -123,7 +123,7 @@ class Cafe extends My_Controller {
           case 'board':
             if ($this->_has_permission($menu->boardid, ACTION_LIST)) {
               $this->view->sidebar = array_merge($this->view->sidebar,
-                [ (object) ['type' => $menu->groupid == '' ? 'text_link' : 'group_link', 'value' => $menu->name, 'class' => '', 'feather' => 'book-open', 'groupid' => $menu->groupid, 'link' => '/index.php/' . $this->cafe->type . '/list/' . $this->cafe->cafeid . '/' . $menu->boardid]]
+                [ (object) ['type' => $menu->groupid == '' ? 'text_link' : 'group_link', 'value' => $menu->name, 'class' => '', 'feather' => 'book-open', 'groupid' => $menu->groupid, 'link' => '/index.php/cafe/list/' . $this->cafe->cafeid . '/' . $menu->boardid]]
               );
             }
             break;
@@ -174,12 +174,18 @@ class Cafe extends My_Controller {
       $this->cache->save($cache_key, $this->user, $this->config->item('cache_exp_user'));
     }
 
-    $this->_redirect('/' . $this->cafe->type  . '/home/' . $this->cafeid);
+    $this->_redirect('/cafe/home/' . $this->cafeid);
   }
 
-  function _home()
+  public function home($cafeid)
   {
+    if (!$this->available) return;
+
     // 카페 방문
+    $this->view->info = (object) [ 'cafeid' => $cafeid, 'boardid' => ALL_BOARD ];
+    $this->_set_common_gnb();
+    $this->_set_common_sidebar();
+    $this->_load_view('list');
   }
 
   function _api_content_list($cafeid, $boardid, $last_ownerid, $last_sequence, $srch_type, $srch_str)
@@ -240,8 +246,6 @@ class Cafe extends My_Controller {
         }
 
         // 리스트에 포함 할 게시물 찾음
-        // $content->title = $content->title . '_cache_' . $content->cno;
-        // array_push($result, [$content->bid, $content->cno, $content->ono, $content->seq, $content->nick, $content->tgt_nick, $content->title, $content->del, $content->edit, $content->view, $content->cmt, $content->info]);
         array_push($result, [$content[0], $content[2], $content[3], $content[4], $content[6], $content[14], $content[7], $content[8], $content[10], $content[11], $content[12]]);
         $global_seq = $gseq;
         if (++$result_count >= LIST_FETCH_SIZE) {
@@ -275,38 +279,33 @@ class Cafe extends My_Controller {
             // 캐시에 global sequence 및 리스트 정보 추가
             array_push($this->cafe->content_list->{$boardid}, $global_seq);
             if (!array_key_exists($global_seq, $this->cafe->list_mast)) {
-              // $this->cafe->list_mast->{$global_seq} = $info;
-              $data = array_values($info);
-              echo $data;
-              $this->cafe->list_mast->{$global_seq} = $data;
-              // $this->cafe->list_mast->{$global_seq} = [
-              //   $info->bid,       // 0:board id
-              //   $info->gno,       // 1:global no
-              //   $info->cno,       // 2:content no
-              //   $info->ono,       // 3:owner no
-              //   $info->seq,       // 4:sequence
-              //   $info->uid,       // 5:user id
-              //   $info->nick,      // 6:nickname
-              //   $info->title,     // 7:title
-              //   $info->del,       // 8:deleted
-              //   $info->reg,       // 9:registered time
-              //   $info->edit,      // 10:editted time
-              //   $info->view,      // 11:view count
-              //   $info->cmt,       // 12:comment count
-              //   $info->info,      // 13:info (JSON)
-              //   $info->tgt_nick   // 14:target nickname
-              //   ];
+              $this->cafe->list_mast->{$global_seq} = [
+                $info->bid,       // 0:board id
+                $info->gno,       // 1:global no
+                $info->cno,       // 2:content no
+                $info->ono,       // 3:owner no
+                $info->seq,       // 4:sequence
+                $info->uid,       // 5:user id
+                $info->nick,      // 6:nickname
+                $info->title,     // 7:title
+                $info->del,       // 8:deleted
+                $info->reg,       // 9:registered time
+                $info->edit,      // 10:editted time
+                $info->view,      // 11:view count
+                $info->cmt,       // 12:comment count
+                $info->info,      // 13:info (JSON)
+                $info->tgt_nick   // 14:target nickname
+                ];
             }
 
             if ($boardid == ALL_BOARD) {
-              if (!in_array($data[0], $board_list)) {
+              if (!in_array($info->bid, $board_list)) {
                 // 목록 접근 권한이 없음
                 continue;
               }
             }
 
-            // array_push($result, [$info->bid, $info->cno, $info->ono, $info->seq, $info->nick, $info->tgt_nick, $info->title, $info->del, $info->edit, $info->view, $info->cmt]);
-            array_push($result, [$data[0], $data[2], $data[3], $data[4], $data[6], $data[14], $data[7], $data[8], $data[10], $data[11], $data[12]]);
+            array_push($result, [$info->bid, $info->cno, $info->ono, $info->seq, $info->nick, $info->tgt_nick, $info->title, $info->del, $info->edit, $info->view, $info->cmt]);
             $result_count++;
           }
         }
@@ -329,6 +328,28 @@ class Cafe extends My_Controller {
       $this->cache->save($cache_key, $this->cafe, $this->config->item('cache_exp_cafe'));
     }
     return $result;
+  }
+
+  public function list($cafeid, $boardid)
+  {
+    if (!$this->_has_permission($boardid, ACTION_LIST)) {
+      $this->_redirect('/');
+      return;
+    }
+
+    $this->view->info = (object) [ 'cafeid' => $cafeid, 'boardid' => $boardid ];
+    $this->_set_common_gnb();
+    $this->_set_common_sidebar();
+    $this->_load_view('list');
+  }
+
+  public function api_content_list($cafeid, $boardid, $last_ownerid, $last_sequence, $srch_type, $srch_str)
+  {
+    if ($boardid != ALL_BOARD && !$this->_has_permission($boardid, ACTION_LIST)) return;
+
+    // 게시판 목록
+    $result = $this->_api_content_list($cafeid, $boardid, $last_ownerid, $last_sequence, $srch_type, $srch_str);
+    echo json_encode($result);
   }
 }
 ?>

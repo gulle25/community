@@ -54,7 +54,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       last_sequence = last.attr("seq");
     }
 
-    var url = "/index.php/apart/api_content_list/<?=$info->cafeid?>/<?=$info->boardid?>/" + last_ownerno + "/" + last_sequence + "/none/_";
+    var url = "/index.php/cafe/api_content_list/<?=$info->cafeid?>/<?=$info->boardid?>/" + last_ownerno + "/" + last_sequence + "/none/_";
     $.getJSON(url, function(json) {
       $.each(json, function() {
         if (this[1] > 0) {
