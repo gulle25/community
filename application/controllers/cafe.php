@@ -185,7 +185,7 @@ class Cafe extends My_Controller {
     $this->view->info = (object) [ 'cafeid' => $cafeid, 'boardid' => ALL_BOARD ];
     $this->_set_common_gnb();
     $this->_set_common_sidebar();
-    $this->_load_view('list');
+    $this->_load_view('list', MENU_LIST);
   }
 
   function _api_content_list($cafeid, $boardid, $last_ownerid, $last_sequence, $srch_type, $srch_str)
@@ -340,7 +340,7 @@ class Cafe extends My_Controller {
     $this->view->info = (object) [ 'cafeid' => $cafeid, 'boardid' => $boardid ];
     $this->_set_common_gnb();
     $this->_set_common_sidebar();
-    $this->_load_view('list');
+    $this->_load_view('list', MENU_LIST);
   }
 
   public function api_content_list($cafeid, $boardid, $last_ownerid, $last_sequence, $srch_type, $srch_str)

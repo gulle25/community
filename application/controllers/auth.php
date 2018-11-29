@@ -22,7 +22,7 @@ class Auth extends My_Controller {
 
     $this->_set_gnb();
     $this->_set_sidebar();
-    $this->_load_view('login');
+    $this->_load_view('login', MENU_LOGOUT);
   }
 
   public function authenticate()
@@ -43,7 +43,7 @@ class Auth extends My_Controller {
       // 폼 검증이 완료 되지 않으면 다시 로그인 폼 출력
       $this->_set_gnb();
       $this->_set_sidebar();
-      $this->_load_view('login');
+      $this->_load_view('login', MENU_LOGOUT);
       return;
     }
 
@@ -57,7 +57,7 @@ class Auth extends My_Controller {
       $this->_set_flash_message(lang($user->errno == My_Model::DB_QUERY_FAIL ? 'query_fail' : 'email_not_found'));
       $this->_set_gnb();
       $this->_set_sidebar();
-      $this->_load_view('login');
+      $this->_load_view('login', MENU_LOGOUT);
       return;
     }
 
@@ -68,7 +68,7 @@ class Auth extends My_Controller {
       $this->_set_flash_message(lang('wrong_password'));
       $this->_set_gnb();
       $this->_set_sidebar();
-      $this->_load_view('login');
+      $this->_load_view('login', MENU_LOGOUT);
       return;
     }
 
@@ -111,7 +111,7 @@ class Auth extends My_Controller {
     {
       case 'begin':   // 회원 가입 절차 시작
         $this->session->set_userdata('signup', (object) ['mode' => $mode]);
-        $this->_load_view('signup_agree');    // 약관 동의
+        $this->_load_view('signup_agree', MENU_LOGOUT);    // 약관 동의
         return;
 
       case 'agree':   // 약관 동의
@@ -127,7 +127,7 @@ class Auth extends My_Controller {
 
         if ($this->form_validation->run() === false)
         {
-          $this->_load_view('signup_agree');
+          $this->_load_view('signup_agree', MENU_LOGOUT);
           return;
         }
 
@@ -137,8 +137,8 @@ class Auth extends My_Controller {
         $sess_signup->agree_location_info = $this->input->post('agree_location_info') ? true : false;
         $sess_signup->agree_event = $this->input->post('agree_event') ? true : false;
         $this->session->set_userdata('signup', $sess_signup);
-        // $this->_load_view('signup');    // 회원 가입
-        $this->_load_view('signup_email');    // 회원 가입
+        // $this->_load_view('signup', MENU_LOGOUT);    // 회원 가입
+        $this->_load_view('signup_email', MENU_LOGOUT);    // 회원 가입
         return;
 
       case 'email':   // 이메일 주소 검증
@@ -151,7 +151,7 @@ class Auth extends My_Controller {
         $this->form_validation->set_rules('email', lang('email'), 'required|valid_email|max_length[120]');
         if ($this->form_validation->run() === false)
         {
-          $this->_load_view('signup_email');
+          $this->_load_view('signup_email', MENU_LOGOUT);
           return;
         }
 
@@ -164,7 +164,7 @@ class Auth extends My_Controller {
         {
           // 이미 가입된 이메일 주소
           $this->_set_flash_message(lang('user_already_exist'));
-          $this->_load_view('signup_email');
+          $this->_load_view('signup_email', MENU_LOGOUT);
           return;
         }
 
@@ -176,7 +176,7 @@ class Auth extends My_Controller {
         $sess_signup->mode = $mode;
         $sess_signup->email = $email;
         $this->session->set_userdata('signup', $sess_signup);
-        $this->_load_view('signup_email_auth');    // 인증 메일 확인
+        $this->_load_view('signup_email_auth', MENU_LOGOUT);    // 인증 메일 확인
         return;
 
       case 'email_auth':   // 이메일 인증 문자 확인
@@ -189,7 +189,7 @@ class Auth extends My_Controller {
         $this->form_validation->set_rules('email_auth', lang('auth_num'), 'required|exact_length[6]|numeric');
         if ($this->form_validation->run() === false)
         {
-          $this->_load_view('signup_email_auth');
+          $this->_load_view('signup_email_auth', MENU_LOGOUT);
           return;
         }
 
@@ -199,13 +199,13 @@ class Auth extends My_Controller {
         {
           // 인증 문자 다름
           $this->_set_flash_message(lang('auth_fail'));
-          $this->_load_view('signup_email_auth');
+          $this->_load_view('signup_email_auth', MENU_LOGOUT);
           return;
         }
 
         $sess_signup->mode = $mode;
         $this->session->set_userdata('signup', $sess_signup);
-        $this->_load_view('signup_password');    // 비밀번호 등록
+        $this->_load_view('signup_password', MENU_LOGOUT);    // 비밀번호 등록
         return;
 
       case 'password':   // 비밀번호 등록
@@ -219,7 +219,7 @@ class Auth extends My_Controller {
         $this->form_validation->set_rules('re_password', lang('re_password'), 'required|matches[password]');
         if ($this->form_validation->run() === false)
         {
-          $this->_load_view('signup_password');
+          $this->_load_view('signup_password', MENU_LOGOUT);
           return;
         }
 
@@ -281,7 +281,7 @@ class Auth extends My_Controller {
 
           if ($this->form_validation->run() === false)
           {
-            $this->_load_view('signup');
+            $this->_load_view('signup', MENU_LOGOUT);
             return;
           }
 
@@ -293,7 +293,7 @@ class Auth extends My_Controller {
             $this->_set_flash_message(lang('user_already_exist'));
             $this->_set_gnb();
             $this->_set_sidebar();
-            $this->_load_view('signup');
+            $this->_load_view('signup', MENU_LOGOUT);
             return;
           }
 
@@ -311,7 +311,7 @@ class Auth extends My_Controller {
 
           if ($this->form_validation->run() === false)
           {
-            $this->_load_view('signup');
+            $this->_load_view('signup', MENU_LOGOUT);
             return;
           }
 
@@ -322,7 +322,7 @@ class Auth extends My_Controller {
             $this->_set_flash_message(lang('email_already_exist'));
             $this->_set_gnb();
             $this->_set_sidebar();
-            $this->_load_view('signup');
+            $this->_load_view('signup', MENU_LOGOUT);
             return;
           }
 
@@ -338,7 +338,7 @@ class Auth extends My_Controller {
 
           if ($this->form_validation->run() === false)
           {
-            $this->_load_view('signup');
+            $this->_load_view('signup', MENU_LOGOUT);
             return;
           }
 
@@ -349,7 +349,7 @@ class Auth extends My_Controller {
             $this->_set_flash_message(lang('phone_already_exist'));
             $this->_set_gnb();
             $this->_set_sidebar();
-            $this->_load_view('signup');
+            $this->_load_view('signup', MENU_LOGOUT);
             return;
           }
 
@@ -365,7 +365,7 @@ class Auth extends My_Controller {
 
           if ($this->form_validation->run() === false)
           {
-            $this->_load_view('signup');
+            $this->_load_view('signup', MENU_LOGOUT);
             return;
           }
 
@@ -383,7 +383,7 @@ class Auth extends My_Controller {
         // var_dump($sess_signup);
         $result = $this->user_model->add($sess_signup);
         // $this->session->set_userdata('signup', $sess_signup);
-        $this->_load_view('signup');    // 회원 가입
+        $this->_load_view('signup', MENU_LOGOUT);    // 회원 가입
         return;
     }
 

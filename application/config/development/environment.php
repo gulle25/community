@@ -17,10 +17,10 @@ define('CACHE_KEY_CAFE', 'cafe_v1_');
 define('DEFAULT_THEME', 'teal');
 define('SIDEBAR_THEME', 'l4');
 define('SIDEBAR_HOVER', 'black');
-define('PAGE_LOGOUT', 'logout');
-define('PAGE_HOME', 'home');
-define('PAGE_LIST', 'list');
-define('PAGE_CONTENT', 'content');
+define('MENU_LOGOUT', 'logout');
+// define('MENU_HOME', 'home');
+define('MENU_LIST', 'list');
+define('MENU_CONTENT', 'content');
 
 
 // Constants

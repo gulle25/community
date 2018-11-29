@@ -20,6 +20,7 @@ class My_Controller extends CI_Controller {
     $this->lang->load('main','korean');
 
     $this->view = (object) [
+      'menu' => 'undefined',
       'gnb' => [],
       'sidebar' => [],
       'content' => (object) []
@@ -107,11 +108,12 @@ class My_Controller extends CI_Controller {
     return true;
   }
 
-  function _load_view($page)
+  function _load_view($page, $menu)
   {
+    $this->view->menu = $menu;
     $this->load->view('head', $this->view);
-    $this->load->view('gnb', $this->view);
     $this->load->view('sidebar', $this->view);
+    $this->load->view('gnb', $this->view);
     $this->load->view($page, $this->view);
     $this->load->view('footer', $this->view);
   }

@@ -26,6 +26,7 @@ function w3_open() {
     } else {
         mySidebar.style.display = 'block';
         overlayBg.style.display = "block";
+        // mySidebar.style.padding = "0 250px";
     }
 }
 
@@ -33,7 +34,27 @@ function w3_open() {
 function w3_close() {
     mySidebar.style.display = "none";
     overlayBg.style.display = "none";
+    // mySidebar.style.padding = "0";
 }
+
+var small_width = false;
+$(window).resize(function() {
+  var ww = $(window).width();
+  document.getElementById('label').innerHTML = ww;
+  // $('#label').value(ww);
+  var main =   document.getElementById('myMain');
+  var top =   document.getElementById('myTop');
+  var bottom =   document.getElementById('myBottom');
+  if (ww <= 992 && !small_width) {
+    // main.style.margin = "0";
+    top.style.paddingRight = "0";
+    small_width = true;
+  } else if (ww > 992 && small_width)
+    // main.style.margin = "0 250px 0 0";
+    top.style.paddingRight = "250px";
+    small_width = false;
+  }
+);
 </script>
 
 </body>
