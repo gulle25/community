@@ -33,8 +33,19 @@ class Cafe extends My_Controller {
     $this->cafe = $this->cache->get($cache_key);
 
     if (!$this->cafe || $this->router->method == 'visit') {
+      // 카페 기본 정보 읽기
+      $this->load->database('mast');
+      $this->load->model('mast_model');
+      $this->cafe = $this->mast_model->get($this->cafeid, $this->router->method == 'visit', $this->session->userid, $this->cafe);
+      if ($this->cafe->errno != My_Model::DB_NO_ERROR)
+      {
+        $this->_set_flash_message(lang($this->cafe->errno == My_Model::DB_QUERY_FAIL ? 'query_fail' : 'unknown_cafe'));
+        $this->_redirect('/');
+        return;
+      }
+
       // 카페 정보 확인
-      $this->load->database();
+      $this->_load_cafe_db($this->cafeid);
       $this->load->model('cafe_model');
       $this->cafe = $this->cafe_model->get($this->cafeid, $this->router->method == 'visit', $this->session->userid, $this->cafe);
       if ($this->cafe->errno != My_Model::DB_NO_ERROR)

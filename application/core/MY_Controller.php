@@ -20,9 +20,9 @@ class My_Controller extends CI_Controller {
     $this->lang->load('main','korean');
 
     $this->view = (object) [
-      'menu' => 'undefined',
-      'gnb' => [],
+      'meta' => (object) [],
       'sidebar' => [],
+      'gnb' => [],
       'content' => (object) []
     ];
 
@@ -44,6 +44,39 @@ class My_Controller extends CI_Controller {
     }
   }
 
+  function _make_random_base36($length) {
+    $result = '';
+    for ($i = 0; $i < $length; $i++) {
+      $n = rand(0, 35);
+      $c = chr($n < 10 ? (48 + $n) : (97 + $n - 10));
+      $result = $result . $c;
+    }
+    return $result;
+  }
+
+  function _id2no($id) {
+    $value = 0;
+    for ($pos=0; $pos < strlen($id); $pos++) {
+      $value *= 36;
+      $code = ord(substr($id, $pos));
+      $num = $code <= 58 ? ($code - 48) : ($code - 97 + 10);
+      $value += $num;
+    }
+    return $value;
+  }
+
+  function _cafe_db_name($cafeid) {
+    $val = ($this->_id2no($cafeid) % (DB_SHARD_MAX / DB_SHARD_MULTIPLIER)) * DB_SHARD_MULTIPLIER;
+    $str = sprintf("cafe_%02x", $val);
+    return $str;
+  }
+
+  function _load_cafe_db($cafeid)
+  {
+    $db_name = $this->_cafe_db_name($cafeid);
+    $this->cafe_db = $this->load->database($db_name);
+  }
+
   function _is_logged_in()
   {
     // 사용자 세션 확인
@@ -59,9 +92,9 @@ class My_Controller extends CI_Controller {
     if (!$this->user)
     {
       // 사용자 캐시가 존재 하지 않으면 DB 에서 정보를 읽는다
-      $this->load->database();
-      $this->load->model('user_model');
-      $user = $this->user_model->get('userid', $this->session->userid, false, false);
+      $this->load->database('mast');
+      $this->load->model('mast_model');
+      $user = $this->mast_model->get_user_mast('userid', $this->session->userid, false, false);
       if ($user->errno == My_Model::DB_QUERY_FAIL)
       {
         // DB 읽기 실패, 세션 로그인 해제
@@ -110,7 +143,7 @@ class My_Controller extends CI_Controller {
 
   function _load_view($page, $menu)
   {
-    $this->view->menu = $menu;
+    $this->view->meta->menu = $menu;
     $this->load->view('head', $this->view);
     $this->load->view('sidebar', $this->view);
     $this->load->view('gnb', $this->view);
@@ -271,14 +304,5 @@ class My_Controller extends CI_Controller {
     );
   }
 
-  function _make_random_base36($length) {
-    $result = '';
-    for ($i = 0; $i < $length; $i++) {
-      $n = rand(0, 35);
-      $c = chr($n < 10 ? (48 + $n) : (97 + $n - 10));
-      $result = $result . $c;
-    }
-    return $result;
-  }
 }
 ?>

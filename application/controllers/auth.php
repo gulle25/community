@@ -49,9 +49,9 @@ class Auth extends My_Controller {
 
     // form validatoin 완료
     $this->cafe_type = $this->input->post('cafe_type');
-    $this->load->database();
-    $this->load->model('user_model');
-    $user = $this->user_model->get('email', $this->input->post('email'), false, true);
+    $this->load->database('mast');
+    $this->load->model('mast_model');
+    $user = $this->mast_model->get_user_mast('email', $this->input->post('email'), false, true);
     if ($user->errno != My_Model::DB_NO_ERROR)
     {
       $this->_set_flash_message(lang($user->errno == My_Model::DB_QUERY_FAIL ? 'query_fail' : 'email_not_found'));
@@ -157,9 +157,9 @@ class Auth extends My_Controller {
 
         // 이메일 주소 중복 검사
         $email = $this->input->post('email');
-        $this->load->database();
-        $this->load->model('user_model');
-        $user = $this->user_model->get('email', $email, false, false);
+        $this->load->database('mast');
+        $this->load->model('mast_model');
+        $user = $this->mast_model->get_user_mast('email', $email, false, false);
         if ($user->errno == My_Model::DB_NO_ERROR)
         {
           // 이미 가입된 이메일 주소
@@ -223,14 +223,14 @@ class Auth extends My_Controller {
           return;
         }
 
-        $this->load->database();
-        $this->load->model('user_model');
+        $this->load->database('mast');
+        $this->load->model('mast_model');
 
         // user ID 생성
         $duplicated = false;
         do {
           $sess_signup->userid = $this->_make_random_base36(BASE36_LEN_USERID);
-          $result = $this->user_model->get('userid', $sess_signup->userid, false, false);
+          $result = $this->mast_model->get_user_mast('userid', $sess_signup->userid, false, false);
           $duplicated = $result->errno == My_Model::DB_NO_ERROR;
         }
         while ($duplicated);
@@ -247,7 +247,7 @@ class Auth extends My_Controller {
         $this->session->unset_userdata('signup', false);
         $this->session->set_userdata('is_logged_in', false);
 
-        $user = $this->user_model->add($sess_signup);
+        $user = $this->mast_model->add($sess_signup);
         if ($user->errno != My_Model::DB_NO_ERROR)
         {
           // 오류
@@ -268,8 +268,8 @@ class Auth extends My_Controller {
           return;
         }
 
-        $this->load->database();
-        $this->load->model('user_model');
+        $this->load->database('mast');
+        $this->load->model('mast_model');
         $sess_signup->mode = $mode;
 
         // var_dump($this->session);
@@ -287,7 +287,7 @@ class Auth extends My_Controller {
 
           // 주민번호로 중복 가입 검사
           $residence_hash = md5($this->input->post('residence_num1') . $this->input->post('residence_num2'));
-          $user = $this->user_model->get('residence', $residence_hash, false, false);
+          $user = $this->mast_model->get_user_mast('residence', $residence_hash, false, false);
           if ($user->errno == My_Model::DB_NO_ERROR)
           {
             $this->_set_flash_message(lang('user_already_exist'));
@@ -316,7 +316,7 @@ class Auth extends My_Controller {
           }
 
           // 이메일 주소 중복 가입 검사
-          $user = $this->user_model->get('email', $this->input->post('email'), false, false);
+          $user = $this->mast_model->get_user_mast('email', $this->input->post('email'), false, false);
           if ($user->errno == My_Model::DB_NO_ERROR)
           {
             $this->_set_flash_message(lang('email_already_exist'));
@@ -343,7 +343,7 @@ class Auth extends My_Controller {
           }
 
           // 휴대폰 번호 주소 중복 가입 검사
-          $user = $this->user_model->get('phone', $this->input->post('phone'), false, false);
+          $user = $this->mast_model->get_user_mast('phone', $this->input->post('phone'), false, false);
           if ($user->errno == My_Model::DB_NO_ERROR)
           {
             $this->_set_flash_message(lang('phone_already_exist'));
@@ -381,7 +381,7 @@ class Auth extends My_Controller {
         // $this->session->unset_userdata('signup', false);
         $this->session->set_userdata('is_logged_in', false);
         // var_dump($sess_signup);
-        $result = $this->user_model->add($sess_signup);
+        $result = $this->mast_model->add($sess_signup);
         // $this->session->set_userdata('signup', $sess_signup);
         $this->_load_view('signup', MENU_LOGOUT);    // 회원 가입
         return;

@@ -13,7 +13,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 }
 </style>
 
-<nav class="w3-sidebar w3-bar-block w3-collapse w3-theme-<?=SIDEBAR_THEME?> w3-animate-left" id="mySidebar">
+<nav class="w3-sidebar w3-bar-block w3-collapse w3-theme-<?=SIDEBAR_THEME?>" id="mySidebar">
     <a class="w3-bar-item w3-button w3-hover-black" href="/">Home</a>
   <?php $item_cnt = 0; ?>
   <?php foreach ($sidebar as $item): ?>

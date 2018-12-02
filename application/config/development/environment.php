@@ -9,6 +9,10 @@ $config['maintenance'] = (object) [
   'end' => '2019.12.31 00:00:00'
   ];
 
+// system
+define('DB_SHARD_MAX', 256);
+define('DB_SHARD_MULTIPLIER', 128);
+
 // Cache version
 define('CACHE_KEY_USER', 'user_v2_');
 define('CACHE_KEY_CAFE', 'cafe_v1_');
@@ -18,7 +22,7 @@ define('DEFAULT_THEME', 'teal');
 define('SIDEBAR_THEME', 'l4');
 define('SIDEBAR_HOVER', 'black');
 define('MENU_LOGOUT', 'logout');
-// define('MENU_HOME', 'home');
+define('MENU_SVC_HOME', 'home');
 define('MENU_LIST', 'list');
 define('MENU_CONTENT', 'content');
 
