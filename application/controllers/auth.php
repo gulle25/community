@@ -78,7 +78,8 @@ class Auth extends My_Controller {
     $this->session->set_userdata('userid', $user->userid);
     $this->session->set_userdata('email', $this->input->post('email'));
     $this->session->set_userdata('grade', $user->grade);
-    // var_dump($user);
+    // echo json_encode($user);
+    // echo json_encode($this->session->userdata());
     redirect('http://' . site_url($this->input->get('returnURL')));
   }
 

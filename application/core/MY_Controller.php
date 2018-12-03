@@ -71,12 +71,6 @@ class My_Controller extends CI_Controller {
     return $str;
   }
 
-  function _load_cafe_db($cafeid)
-  {
-    $db_name = $this->_cafe_db_name($cafeid);
-    $this->cafe_db = $this->load->database($db_name);
-  }
-
   function _is_logged_in()
   {
     // 사용자 세션 확인

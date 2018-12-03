@@ -1,0 +1,6 @@
+{
+  "userid":"aaaaaa",              // 사용자 ID
+  "email":"aaa@aaaa.com",         // 로그인 이메일 주소
+  "grade":"user",                 // 사용자 레벨  'admin' or 'operator' or 'user'
+  "is_logged_in":true             // 로그인 여부
+}

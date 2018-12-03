@@ -48,32 +48,19 @@ class Mast_model extends My_Model {
     return $user;
   }
 
-  function get_cafe_mast($cafeid)
+  function get_cafe_mast($cafeid, $visit, $userid)
   {
     // DB 에서 정보 읽기
-    $cafe = parent::call_single_row('CALL get_cafe_mast(?)', $cafeid);
+    $cafe = parent::call_single_row('CALL get_cafe_mast(?, ?, ?)', [$cafeid, $visit, $userid]);
     if ($cafe->errno != parent::DB_NO_ERROR)
     {
       return $cafe;
     }
 
     // JSON -> Objet
-    $user->user_info = json_decode($user->user_info_json);
-    $user->cafe_info = json_decode($user->cafe_info_json);
-    $user->admin_info = json_decode($user->admin_info_json);
-    unset($user->user_info_json);
-    unset($user->cafe_info_json);
-    unset($user->admin_info_json);
-
-    if ($check_cache)
-    {
-      // 캐시에 저장
-      // var_dump($cache);
-      $cache_key = CACHE_KEY_USER . md5($user->userid);
-      $this->cache->save($cache_key, $user, $this->config->item('cache_exp_user'));
-    }
-
-    return $user;
+    $cafe->cafe_info = json_decode($cafe->cafe_info_json);
+    unset($cafe->cafe_info_json);
+    return $cafe;
   }
 
   function add($info)

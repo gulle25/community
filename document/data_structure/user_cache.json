@@ -1,0 +1,27 @@
+{
+  "userid":"abcdef",                  // 사용자 아이디
+  "email":"aaa@aaaa.com",             // 이메일 주소
+  "pwd_hash":"b59c67bf792a4778121e42fa67702eba",      // 비밀번호 hsh
+  "user_name":"홍길동",               // 사용자 이름
+  "grade":"user",                     // 등급 'admin', 'operator', 'user'
+  "birthday":20180101,                // 생년월일
+  "gender":"F",                       // 성별 'F', 'M'
+  "phone":"01012345678",              // 전화번호
+  "cash":0,                           // 보율 캐시
+  "point":0,                          // 보유 포인트
+  "reg_date":"2018-11-07 11:42:21",   // 회원 가입 시각
+  "last_login":"2018-12-03 22:03:10", // 최근 로그인 시각
+  "user_info":{                       // 추가 사용자 정보
+  },
+  "cafe_info":{                       // 가입한 카페 정보
+    "abcde":{                         // 카페 아이디
+      "type":"apart",                 // 카페 타입 'apart'
+      "name":"cafe name",             // 카페 이름
+      "role":[301,402],               // 카페 내 역할 리스트
+      "last_visit":"2018-12-02 02:54:03", // 최근 방문 시각
+      "bookmark":0                    // 즐겨 찾는 카페 여부
+    },
+  },
+  "admin_info":{                      // 관리자 정보
+  }
+}
