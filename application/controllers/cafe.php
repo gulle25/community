@@ -60,7 +60,7 @@ class Cafe extends My_Controller {
       $this->cafe->board_info = $cafe_info->board_info;
 
       // 캐시에 저장
-      echo json_encode($this->cafe);
+      // echo json_encode($this->cafe);
       $cache_key = CACHE_KEY_CAFE . md5($this->cafeid);
       $this->cache->save($cache_key, $this->cafe, $this->config->item('cache_exp_cafe'));
     }
@@ -276,7 +276,7 @@ class Cafe extends My_Controller {
     }
 
     // DB 에서 리스트 가져 오기
-    $this->load->database();
+    $this->load->database($this->_cafe_db_name($this->cafeid));
     $this->load->model('cafe_model');
     $cache_key = CACHE_KEY_CAFE . md5($this->cafeid);
     $board_sql = $boardid == ALL_BOARD ? '' : 'AND boardid = ?';
