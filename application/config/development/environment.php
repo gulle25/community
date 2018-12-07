@@ -9,9 +9,6 @@ $config['maintenance'] = (object) [
   'end' => '2019.12.31 00:00:00'
   ];
 
-// system
-define('DB_SHARD_MAX', 256);
-define('DB_SHARD_MULTIPLIER', 128);
 
 // Cache version
 define('CACHE_KEY_USER', 'user_v2_');
