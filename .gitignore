@@ -33,6 +33,7 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 # ========================================================
 # Community
 # ========================================================
+sftp-config.json
 web.config
 sessions/*
 application/config/database.php
