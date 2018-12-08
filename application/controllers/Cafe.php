@@ -187,7 +187,7 @@ class Cafe extends My_Controller {
     $this->_set_flash_message('cafe ' . $this->cafe->name . '(' . $this->cafeid . ')에 오셨습니다');
 
     // 사용자 캐시 갱신
-    $cache_key = CACHE_KEY_USER . md5($this->session->userid);
+    $cache_key = CACHE_KEY_USER . $this->session->userid;
     if (array_key_exists($this->cafeid, $this->user->cafe_info)) {
       // 카페 회원인 경우 방문 정보 갱신
       $this->user->cafe_info->{$this->cafeid}->last_visit = $this->now;

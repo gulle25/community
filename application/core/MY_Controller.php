@@ -80,7 +80,7 @@ class My_Controller extends CI_Controller {
     }
 
     // 사용자 캐시 확인
-    $cache_key = CACHE_KEY_USER . md5($this->session->userid);
+    $cache_key = CACHE_KEY_USER . $this->session->userid;
     $this->user = $this->cache->get($cache_key);
     $this->cafe_type = $this->session->cafe_type;
     if (!$this->user)
