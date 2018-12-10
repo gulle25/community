@@ -29,12 +29,12 @@ class Cafe extends My_Controller {
 
     // 카페 캐시 읽기
     $this->cafeid = $this->router->uri->segments[3];
-    $cache_key = CACHE_KEY_CAFE . md5($this->cafeid);
+    $cache_key = CACHE_KEY_CAFE . $this->cafeid;
     $this->cafe = $this->cache->get($cache_key);
 
     if (!$this->cafe || $this->router->method == 'visit') {
       // 카페 기본 정보 읽기
-      $this->load->database('mast');
+      $this->load->database('mast_r');
       $this->load->model('mast_model');
       $this->cafe = $this->mast_model->get_cafe_mast($this->cafeid, $this->router->method == 'visit', $this->session->userid);
       $this->db->close();
@@ -46,7 +46,7 @@ class Cafe extends My_Controller {
       }
 
       // 카페 정보 확인
-      $this->load->database($this->_cafe_db_name($this->cafeid));
+      $this->load->database($this->_cafe_db_name($this->cafeid, 'r'));
       $this->load->model('cafe_model');
       $cafe_info = $this->cafe_model->get_cafe_info($this->cafeid, false);
       $this->db->close();
@@ -61,7 +61,7 @@ class Cafe extends My_Controller {
 
       // 캐시에 저장
       // echo json_encode($this->cafe);
-      $cache_key = CACHE_KEY_CAFE . md5($this->cafeid);
+      $cache_key = CACHE_KEY_CAFE . $this->cafeid;
       $this->cache->save($cache_key, $this->cafe, $this->config->item('cache_exp_cafe'));
     }
 
@@ -238,7 +238,7 @@ class Cafe extends My_Controller {
       }
 
       // 캐시 갱신
-      $cache_key = CACHE_KEY_CAFE . md5($this->cafeid);
+      $cache_key = CACHE_KEY_CAFE . $this->cafeid;
       $this->cache->save($cache_key, $this->cafe, $this->config->item('cache_exp_cafe'));
 
       if ($last_ownerid != MAX_CONTENTNO || $last_sequence = 0) {
@@ -276,9 +276,9 @@ class Cafe extends My_Controller {
     }
 
     // DB 에서 리스트 가져 오기
-    $this->load->database($this->_cafe_db_name($this->cafeid));
+    $this->load->database($this->_cafe_db_name($this->cafeid, 'r'));
     $this->load->model('cafe_model');
-    $cache_key = CACHE_KEY_CAFE . md5($this->cafeid);
+    $cache_key = CACHE_KEY_CAFE . $this->cafeid;
     $board_sql = $boardid == ALL_BOARD ? '' : 'AND boardid = ?';
     $db_fetch = false;
 

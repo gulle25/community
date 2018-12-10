@@ -13,17 +13,17 @@ class Mast_model extends My_Model {
     $check_cache : availeble when $category is 'userid'
     $is_login : available when $category is 'email'
    */
-  function get_user_mast($category, $value, $check_cache = true, $is_login = false)
+  function get_user_mast($category, $value, $check_cache = true)
   {
     if ($check_cache && $category == 'userid')
     {
-      $cache_key = CACHE_KEY_USER . md5($value);
+      $cache_key = CACHE_KEY_USER . $value;
       $cache = $this->cache->get($cache_key);
       if ($cache) return $cache;
     }
 
     // DB 에서 정보 읽기
-    $user = parent::call_single_row('CALL get_user_mast(?, ?, ?)', [$category, $value, $is_login]);
+    $user = parent::call_single_row('CALL get_user_mast(?, ?)', [$category, $value]);
     if ($user->errno != parent::DB_NO_ERROR)
     {
       return $user;
@@ -41,7 +41,7 @@ class Mast_model extends My_Model {
     {
       // 캐시에 저장
       // var_dump($cache);
-      $cache_key = CACHE_KEY_USER . md5($user->userid);
+      $cache_key = CACHE_KEY_USER . $user->userid;
       $this->cache->save($cache_key, $user, $this->config->item('cache_exp_user'));
     }
 

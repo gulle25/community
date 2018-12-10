@@ -49,7 +49,7 @@ class Auth extends My_Controller {
 
     // form validatoin 완료
     $this->cafe_type = $this->input->post('cafe_type');
-    $this->load->database('mast');
+    $this->load->database('mast_r');
     $this->load->model('mast_model');
     $user = $this->mast_model->get_user_mast('email', $this->input->post('email'), false, true);
     if ($user->errno != My_Model::DB_NO_ERROR)
@@ -158,7 +158,7 @@ class Auth extends My_Controller {
 
         // 이메일 주소 중복 검사
         $email = $this->input->post('email');
-        $this->load->database('mast');
+        $this->load->database('mast_r');
         $this->load->model('mast_model');
         $user = $this->mast_model->get_user_mast('email', $email, false, false);
         if ($user->errno == My_Model::DB_NO_ERROR)
@@ -224,7 +224,7 @@ class Auth extends My_Controller {
           return;
         }
 
-        $this->load->database('mast');
+        $this->load->database('mast_r');
         $this->load->model('mast_model');
 
         // user ID 생성
@@ -269,7 +269,7 @@ class Auth extends My_Controller {
           return;
         }
 
-        $this->load->database('mast');
+        $this->load->database('mast_r');
         $this->load->model('mast_model');
         $sess_signup->mode = $mode;
 

@@ -14,7 +14,7 @@ class My_Controller extends CI_Controller {
     parent::__construct();
 
     $this->load->config('environment');
-    $this->load->driver('cache', ['adapter' => 'apc', 'backup' => 'file']);
+    $this->load->driver('cache', ['adapter' => 'memcached', 'backup' => 'file']);
     $this->load->library('session');
 
     $this->lang->load('main','korean');
@@ -65,9 +65,9 @@ class My_Controller extends CI_Controller {
     return $value;
   }
 
-  function _cafe_db_name($cafeid) {
+  function _cafe_db_name($cafeid, $action) {
     $val = ($this->_id2no($cafeid) % (DB_SHARD_MAX / DB_SHARD_MULTIPLIER)) * DB_SHARD_MULTIPLIER;
-    $str = sprintf("cafe_%02x", $val);
+    $str = sprintf("cafe_%02x_%s", $val, $action);
     return $str;
   }
 
@@ -86,7 +86,7 @@ class My_Controller extends CI_Controller {
     if (!$this->user)
     {
       // 사용자 캐시가 존재 하지 않으면 DB 에서 정보를 읽는다
-      $this->load->database('mast');
+      $this->load->database('mast_r');
       $this->load->model('mast_model');
       $user = $this->mast_model->get_user_mast('userid', $this->session->userid, false, false);
       if ($user->errno == My_Model::DB_QUERY_FAIL)

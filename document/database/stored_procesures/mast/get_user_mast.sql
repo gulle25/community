@@ -2,7 +2,7 @@ DELIMITER $$
 
 DROP PROCEDURE IF EXISTS `get_user_mast`$$
 
-CREATE PROCEDURE `get_user_mast`(IN i_category VARCHAR(32), IN i_value VARCHAR(256), IN i_login BOOL)
+CREATE PROCEDURE `get_user_mast`(IN i_category VARCHAR(32), IN i_value VARCHAR(256))
 label_procedure: BEGIN
 -- i_category : 'email', 'userid', 'name', 'residence', 'phone'
   DECLARE v_userid VARCHAR(32);
@@ -76,12 +76,6 @@ label_procedure: BEGIN
     LEAVE label_procedure;
   END IF;
 
-  IF i_login THEN
-    -- 로그인 시각 업데이트
-    UPDATE user_mast SET last_login = CURRENT_TIMESTAMP WHERE userid = v_userid;
-    SET v_last_login = CURRENT_TIMESTAMP;
-  END IF;
-
   -- 가입한 카페 목록
   OPEN cur_cafe;
   SET v_cafe_info = '{';
@@ -108,7 +102,7 @@ label_procedure: BEGIN
 
   -- 결과 반환
   SELECT 0 errno, v_userid userid, v_email email, v_pwd_hash pwd_hash, v_name user_name, v_grade grade, v_birthday birthday, v_gender gender, v_phone phone,
-    v_cash cash, v_point point, v_reg_date reg_date, v_last_login last_login, v_user_info user_info_json, v_cafe_info cafe_info_json, v_admin_info admin_info_json;
+    v_cash cash, v_point POINT, v_reg_date reg_date, v_last_login last_login, v_user_info user_info_json, v_cafe_info cafe_info_json, v_admin_info admin_info_json;
 END$$
 
 DELIMITER ;
