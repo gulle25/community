@@ -12,7 +12,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $config = array(
 	'default' => array(
-		'hostname' => '127.0.0.1',
+		'hostname' => 'comm-session.bbt4qu.0001.apn2.cache.amazonaws.com',
 		'port'     => '11211',
 		'weight'   => '1',
 	),
